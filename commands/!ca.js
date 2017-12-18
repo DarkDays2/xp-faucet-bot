@@ -8,69 +8,72 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
   var guild = message.guild;
 
   var channels = guild.channels;
-  
+
   if(!args[0]){
     message.reply('チャンネル名を指定してください');
     XPBot.log('!ca', 'チャンネル名を指定してください', 'ERR');
     return;
   }
-  
+
   if(!channels.exists('name', args[0])){
     message.reply(args[0] + 'チャンネルは存在しません');
     XPBot.log('!ca', args[0] + 'チャンネルは存在しません', 'ERR');
     return;
   }
+  
+  XPBot.user.setGame('アドレスを取得中');
+  let channel = channels.find('name', args[0]);
+  //channels.forEach(channel => {
+  console.log("#", channel.name);
+  if(!channel.fetchMessages) return;
 
-  channels.forEach(channel => {
-    console.log("#", channel.name);
-    if(!channel.fetchMessages) return;
+  (async()=>{
+    var prevStart = '';
+    var loopEnd = false;
+    var totalSize = 0;
 
-    (async()=>{
-      var prevStart = '';
-      var loopEnd = false;
-      var totalSize = 0;
-      
-      do{
-        let promise = channel.fetchMessages({
-          limit: 100,
-          before: prevStart
-        }).catch(console.error);
+    do{
+      let promise = channel.fetchMessages({
+        limit: 100,
+        before: prevStart
+      }).catch(console.error);
 
-        let messages = await promise;
-        //prevMegs = messages;
-        //console.log("aaa");
-        let last = messages.last();
-        prevStart = last ? last.id : 'NONE';
-        let size = messages.size;
-        loopEnd = size < 100;
-        totalSize += size;
+      let messages = await promise;
+      //prevMegs = messages;
+      //console.log("aaa");
+      let last = messages.last();
+      prevStart = last ? last.id : 'NONE';
+      let size = messages.size;
+      loopEnd = size < 100;
+      totalSize += size;
 
-        //console.log(prevStart, size, loopEnd, totalSize);
+      console.log(prevStart, size, loopEnd, totalSize);
 
-        messages.forEach(msg => {
-          let byMainBot = true; //msg.author.id === '352815000257167362';
-          if(!byMainBot) return;
+      messages.forEach(msg => {
+        let byMainBot = true; //msg.author.id === '352815000257167362';
+        if(!byMainBot) return;
 
-          let isReturnOfBalance = msg.content.includes('Balance:');
-          if(!isReturnOfBalance) return;
+        let isReturnOfBalance = msg.content.includes('Balance:');
+        if(!isReturnOfBalance) return;
 
-          if(byMainBot && isReturnOfBalance){
-            //console.log("     TRUE: ", msgs.content);
-            let regBalanceMsg = /<@(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
-            let regInfo = regBalanceMsg.exec(msg.content);
+        if(byMainBot && isReturnOfBalance){
+          //console.log("     TRUE: ", msgs.content);
+          let regBalanceMsg = /<@!?(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
+          let regInfo = regBalanceMsg.exec(msg.content);
 
-            if(regInfo){
-              let userID = regInfo[1]; // Balanceコマンドを実行したUserのID
-              let userAddress = regInfo[2]; // Balanceコマンドで出力されたXPウォレットアドレス
-              console.log("     ", regInfo[1], regInfo[2]);
-              /*await */XPBot.db.walletDB.addAddress(userID, userAddress);
-            }
+          if(regInfo){
+            let userID = regInfo[1]; // Balanceコマンドを実行したUserのID
+            let userAddress = regInfo[2]; // Balanceコマンドで出力されたXPウォレットアドレス
+            console.log("     ", regInfo[1], regInfo[2]);
+            /*await */XPBot.db.walletDB.addAddress(userID, userAddress);
           }
-        });
-      } while(!loopEnd);
-      console.log("end", totalSize);
-    })();
-  });
+        }
+      });
+    } while(!loopEnd);
+    console.log("end", totalSize);
+    XPBot.user.setGame('');
+  })();
+  //});
 };
 
 exports.conf = {
