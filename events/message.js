@@ -59,7 +59,7 @@ module.exports = (XPBot, message) => {
 
     if(level < XPBot.levelCache[cmd.conf.permLevel]) {
       if(settings.systemNotice === "true") {
-        return message.channel.send(`あなたは、指定されたコマンドを実行するのに必要な権限がありません。
+        return message.channel.send(`:no_entry_sign: あなたは、指定されたコマンドを実行するのに必要な権限がありません。
 あなたの権限レベル: ${level} (${XPBot.config.permLevels.find(l => l.level === level).name})
 要求されている権限レベル: ${XPBot.levelCache[cmd.conf.permLevel]} (${cmd.conf.permLevel})`);
       } else {
