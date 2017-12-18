@@ -49,7 +49,7 @@ exports.conf = {
 
 exports.help = {
   name: "help",
-  category: "System",
+  category: "システム",
   description: "権限レベルに合わせて使用可能なコマンドを全て表示します",
   usage: "help [コマンド名]"
 };

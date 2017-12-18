@@ -82,7 +82,7 @@ exports.conf = {
 
 exports.help = {
   name: "!ca",
-  category: "DB",
-  description: "get addresses from log",
-  usage: "!ca"
+  category: "データベース",
+  description: "指定されたチャンネルの発言ログから、Xp-BotによるBalanceコマンドの応答を探し、ユーザーのIDとウォレットアドレスをDB化します。",
+  usage: "!ca <チャンネル名>"
 };

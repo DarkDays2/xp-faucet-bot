@@ -83,7 +83,7 @@ exports.conf = {
 
 exports.help = {
   name: "set",
-  category: "System",
-  description: "View or change settings for your server.",
-  usage: "set <view/get/edit> <key> <value>"
+  category: "システム",
+  description: "このサーバー用の設定を表示・変更します。",
+  usage: "set <view/get/edit> <キー名> <値>"
 };

@@ -15,7 +15,7 @@ exports.conf = {
 
 exports.help = {
   name: "dbtest",
-  category: "DB",
-  description: "Dbtest",
+  category: "データベース",
+  description: "Database Testing",
   usage: "dbtest"
 };

@@ -7,8 +7,7 @@ module.exports = (XPBot, message) => {
   if(message.author.id === XPBot.user.id) return;
 
   if(message.author.bot){
-    if(XPBot.settings.mainBots.includes(message.author.id)){
-      //
+    if(XPBot.config.mainBots.includes(message.author.id)){
       let regBalanceMsg = /<@(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
       let regInfo = regBalanceMsg.exec(message.content);
 

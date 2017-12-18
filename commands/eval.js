@@ -22,7 +22,7 @@ exports.conf = {
 
 exports.help = {
   name: "eval",
-  category: "System",
+  category: "システム",
   description: "任意のJavaScriptコードを実行します。.",
-  usage: "eval [...code]"
+  usage: "eval [...コード]"
 };

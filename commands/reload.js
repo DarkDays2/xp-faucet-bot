@@ -19,7 +19,7 @@ exports.conf = {
 
 exports.help = {
   name: "reload",
-  category: "System",
+  category: "システム",
   description: "修正したコマンドを再読み込みします。",
-  usage: "reload [command]"
+  usage: "reload [コマンド名]"
 };

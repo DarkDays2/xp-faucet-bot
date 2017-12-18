@@ -20,7 +20,7 @@ exports.conf = {
 
 exports.help = {
   name: "die",
-  category: "System",
+  category: "システム",
   description: "Botをシャットダウンします。PM2下では自動的に再起動します。",
   usage: "die"
 };

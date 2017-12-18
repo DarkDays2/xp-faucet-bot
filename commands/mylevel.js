@@ -12,7 +12,7 @@ exports.conf = {
 
 exports.help = {
   name: "mylevel",
-  category: "Miscelaneous",
+  category: "その他",
   description: "この場所でのあなたの権限レベルを表示します。",
   usage: "mylevel"
 };
