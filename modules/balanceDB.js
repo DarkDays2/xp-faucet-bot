@@ -74,7 +74,7 @@ module.exports = function(XPBot) {
   
   create.then(x=>{
     if(!x){
-      XPBot.db.walletDB.run('CREATE TABLE balance_addresses_on_original(id text primary key , address text unique not null)');
+      XPBot.db.walletDB.run('CREATE TABLE balance_addresses_on_original(id TEXT PRIMARY KEY , address TEXT UNIQUE NOT NULL)');
       writeLog('LOG', '本家Bot用アドレステーブルを作成しました');
     }
   }).catch(err =>{
