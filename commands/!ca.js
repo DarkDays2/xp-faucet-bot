@@ -1,10 +1,4 @@
 exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-unused-vars
-  /*XPBot.db.walletDB.addAddress('abab50123', 'ababTestDADSADASDASD50123')
-    .then(() => { 
-    XPBot.db.walletDB.getAddressById('abab50123')
-      .then(x => { console.log(x)});
-  }).catch((ex)=> {console.error(ex)});*/
-
   var guild = message.guild;
 
   var channels = guild.channels;
@@ -14,20 +8,8 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     XPBot.log('!ca', 'チャンネル名を指定してください', 'ERR');
     return;
   }
-
-  if(!channels.exists('name', args[0])){
-    message.reply(args[0] + 'チャンネルは存在しません');
-    XPBot.log('!ca', args[0] + 'チャンネルは存在しません', 'ERR');
-    return;
-  }
   
-  XPBot.user.setGame('アドレスを取得中');
-  let channel = channels.find('name', args[0]);
-  //channels.forEach(channel => {
-  console.log("#", channel.name);
-  if(!channel.fetchMessages) return;
-
-  (async()=>{
+  let doCA = async channel => {
     var prevStart = '';
     var loopEnd = false;
     var totalSize = 0;
@@ -49,7 +31,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
 
       console.log(prevStart, size, loopEnd, totalSize);
 
-      messages.forEach(msg => {
+      messages.forEach(async msg => {
         let byMainBot = true; //msg.author.id === '352815000257167362';
         if(!byMainBot) return;
 
@@ -65,15 +47,39 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
             let userID = regInfo[1]; // Balanceコマンドを実行したUserのID
             let userAddress = regInfo[2]; // Balanceコマンドで出力されたXPウォレットアドレス
             console.log("     ", regInfo[1], regInfo[2]);
-            /*await */XPBot.db.walletDB.addAddress(userID, userAddress);
+            await XPBot.db.walletDB.addAddress(userID, userAddress, 'Bot');
           }
         }
       });
     } while(!loopEnd);
     console.log("end", totalSize);
     XPBot.user.setGame('');
-  })();
-  //});
+  };
+  
+  XPBot.user.setGame('アドレスを取得中');
+  
+  if(args[0] === 'all'){
+    channels.forEach(channel => {
+      //console.log("#", channel.name);
+      if(!channel.fetchMessages) return;
+      
+      XPBot.log('!ca', 'アドレスの取得を開始: #' + channel.name);
+      doCA(channel);
+    });
+    
+  } else{
+    if(!channels.exists('name', args[0])){
+      message.reply(args[0] + 'チャンネルは存在しません');
+      XPBot.log('!ca', args[0] + 'チャンネルは存在しません', 'ERR');
+      return;
+    }
+
+    let channel = channels.find('name', args[0]);
+    if(!channel.fetchMessages) return;
+    
+    XPBot.log('!ca', 'アドレスの取得を開始: #' + channel.name);
+    doCA(channel);
+  }
 };
 
 exports.conf = {

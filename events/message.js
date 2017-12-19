@@ -8,13 +8,13 @@ module.exports = (XPBot, message) => {
 
   if(message.author.bot){
     if(XPBot.config.mainBots.includes(message.author.id)){
-      let regBalanceMsg = /<@(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
+      let regBalanceMsg = /<@!?(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
       let regInfo = regBalanceMsg.exec(message.content);
 
       if(regInfo){
         let userID = regInfo[1]; // Balanceコマンドを実行したUserのID
         let userAddress = regInfo[2]; // Balanceコマンドで出力されたXPウォレットアドレス
-        XPBot.db.walletDB.addAddress(userID, userAddress)
+        XPBot.db.walletDB.addAddress(userID, userAddress, 'Bot')
           .then(()=>{
           message.channel.send('DBに登録しました');
         })
