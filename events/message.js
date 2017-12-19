@@ -14,7 +14,7 @@ module.exports = (XPBot, message) => {
       if(regInfo){
         let userID = regInfo[1]; // Balanceコマンドを実行したUserのID
         let userAddress = regInfo[2]; // Balanceコマンドで出力されたXPウォレットアドレス
-        XPBot.db.walletDB.addAddress(userID, userAddress)
+        XPBot.db.walletDB.addAddress(userID, userAddress, 'Bot')
           .then(()=>{
           message.channel.send('DBに登録しました');
         })

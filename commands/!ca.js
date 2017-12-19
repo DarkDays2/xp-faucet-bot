@@ -1,10 +1,4 @@
 exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-unused-vars
-  /*XPBot.db.walletDB.addAddress('abab50123', 'ababTestDADSADASDASD50123')
-    .then(() => { 
-    XPBot.db.walletDB.getAddressById('abab50123')
-      .then(x => { console.log(x)});
-  }).catch((ex)=> {console.error(ex)});*/
-
   var guild = message.guild;
 
   var channels = guild.channels;
@@ -53,7 +47,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
             let userID = regInfo[1]; // Balanceコマンドを実行したUserのID
             let userAddress = regInfo[2]; // Balanceコマンドで出力されたXPウォレットアドレス
             console.log("     ", regInfo[1], regInfo[2]);
-            await XPBot.db.walletDB.addAddress(userID, userAddress);
+            await XPBot.db.walletDB.addAddress(userID, userAddress, 'Bot');
           }
         }
       });
