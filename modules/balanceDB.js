@@ -45,35 +45,6 @@ module.exports = function(XPBot) {
     '本家Bot用アドレステーブル',
     'id TEXT PRIMARY KEY, address TEXT UNIQUE NOT NULL, add_by TEXT NOT NULL'
   );
-  /*let create = new Promise((resolve, reject) => {
-    XPBot.db.walletDB.get(
-      'SELECT count(*) FROM sqlite_master WHERE type = "table" AND name = $name',
-      {$name: 'balance_addresses_on_original'},
-      function(err, res){
-        if(err){
-          writeLog('ERR', '本家Bot用アドレステーブルの存在確認に失敗しました', );
-          reject(err);
-        }
-        var exists = false;
-        if(0 < res['count(*)']){
-          exists = true;
-          writeLog('LOG', '本家Bot用アドレステーブルは存在します');
-        } else{
-          writeLog('LOG', '本家Bot用アドレステーブルは存在しません');
-        }
-        resolve(exists);
-      }
-    );
-  });
-  
-  create.then(x=>{
-    if(!x){
-      XPBot.db.walletDB.run('CREATE TABLE balance_addresses_on_original(id TEXT PRIMARY KEY , address TEXT UNIQUE NOT NULL)');
-      writeLog('LOG', '本家Bot用アドレステーブルを作成しました');
-    }
-  }).catch(err =>{
-    console.error(err);
-  });*/
   
   const writeLog = (title, contents)=>{
     XPBot.log('db', contents, title);
