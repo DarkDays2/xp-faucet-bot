@@ -25,6 +25,13 @@ module.exports = (XPBot, message) => {
     }
 
   } else{
+    const level = XPBot.permlevel(message);
+    
+    if(message.content.includes("わよ！")){
+      message.reply('__***もちろんですわ！***__');
+      XPBot.log("log", `${XPBot.config.permLevels.find(l => l.level === level).name} の ${message.author.username}(${message.author.id}) がわよ！を実行しました`, "CMD");
+      return;
+    }
 
     // PersistentCollectionからこのサーバー用の設定を取得
     // Guildが無い場合はデフォルト設定（DM用）
@@ -46,7 +53,7 @@ module.exports = (XPBot, message) => {
     const command = args.shift().toLowerCase();
 
     // ユーザーもしくはメンバーの権限を取得
-    const level = XPBot.permlevel(message);
+    // const level = XPBot.permlevel(message);
 
     // 指定されたコマンド名がコマンドもしくはエイリアスとして存在するか確認
     const cmd = XPBot.commands.get(command) || XPBot.commands.get(XPBot.aliases.get(command));
