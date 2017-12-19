@@ -3,10 +3,10 @@
 module.exports = function(XPBot) {
   const sqlite = require('../modules/dbutil.js');
   XPBot.db = new Object();
-  XPBot.db.walletDB = sqlite.init(XPBot, './db/XpDiscordWallet.db');
+  XPBot.db.walletDB = sqlite.initDB(XPBot, './db/XpDiscordWallet.db');
   
   XPBot.db.walletDB.addAddress = (id, address, addBy) => {
-    writeLog('LOG', 'ウォレットDBへアドレスを登録します id: ' + id + ', address: ' + address);
+    writeLog('LOG', 'ウォレットDBへアドレスを登録します id: ' + id + ', address: ' + address + ', add_by: ' + addBy);
     return new Promise((resolve, reject) => {
       XPBot.db.walletDB.run(
         'INSERT OR IGNORE INTO balance_addresses_on_original VALUES($id, $address, $addBy)',
@@ -38,20 +38,14 @@ module.exports = function(XPBot) {
     });
   };
   
-  XPBot.db.walletDB.closeFromDB = () => {
-    return new Promise((resolve, reject) => {
-      try{
-        XPBot.db.walletDB.close();
-        writeLog('ERR', 'ウォレットDBから切断しました', );
-        resolve();
-      } catch(ex){
-        writeLog('ERR', 'ウォレットDBの切断処理中にエラーが発生しました', );
-        reject(ex);
-      }
-    });
-  };
-
-  let create = new Promise((resolve, reject) => {
+  sqlite.initTB(
+    XPBot, 
+    XPBot.db.walletDB, 
+    'balance_addresses_on_original', 
+    '本家Bot用アドレステーブル',
+    'id TEXT PRIMARY KEY, address TEXT UNIQUE NOT NULL, add_by TEXT NOT NULL'
+  );
+  /*let create = new Promise((resolve, reject) => {
     XPBot.db.walletDB.get(
       'SELECT count(*) FROM sqlite_master WHERE type = "table" AND name = $name',
       {$name: 'balance_addresses_on_original'},
@@ -79,7 +73,7 @@ module.exports = function(XPBot) {
     }
   }).catch(err =>{
     console.error(err);
-  });
+  });*/
   
   const writeLog = (title, contents)=>{
     XPBot.log('db', contents, title);
