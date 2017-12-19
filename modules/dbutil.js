@@ -1,7 +1,7 @@
 var sqlite3 = require('sqlite3');
 var writeLog;
 
-module.exports.init = function (XPBot, filename) {
+module.exports.init = function(XPBot, filename) {
   writeLog = (title, contents)=>{
     XPBot.log('db', contents, title);
   };
