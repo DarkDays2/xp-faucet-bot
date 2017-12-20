@@ -1,3 +1,4 @@
+const moment = require("moment");
 module.exports = (XPBot) => {
 
   /*
@@ -32,8 +33,9 @@ module.exports = (XPBot) => {
   Logs to console. Future patches may include time+colors
   */
   XPBot.log = (type, msg, title) => {
+    let now = moment().format('YYYY-MM-DD HH:mm:ss:SS');
     if(!title) title = "Log";
-    console.log(`[${type}] [${title}]${msg}`);
+    console.log(`[${now}][${type}] [${title}]${msg}`);
   };
 
 

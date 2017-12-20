@@ -6,17 +6,17 @@ module.exports = function(XPBot) {
   XPBot.db.walletDB = sqlite.initDB(XPBot, './db/XpDiscordWallet.db');
   
   XPBot.db.walletDB.addAddress = (id, address, addBy) => {
-    writeLog('LOG', 'ウォレットDBへアドレスを登録します id: ' + id + ', address: ' + address + ', add_by: ' + addBy);
+    //writeLog('LOG', 'ウォレットDBへアドレスを登録します id: ' + id + ', address: ' + address + ', add_by: ' + addBy);
     return new Promise((resolve, reject) => {
       XPBot.db.walletDB.run(
         'INSERT OR IGNORE INTO balance_addresses_on_original VALUES($id, $address, $addBy)',
         {$id: id, $address: address, $addBy: addBy},
         function(err){
           if(err) {
-            writeLog('ERR', 'ウォレットDBへのアドレス登録に失敗しました')
+            writeLog('ERR', 'ウォレットDBへのアドレス登録に失敗しました (id: ' + id + ', address: ' + address + ', add_by: ' + addBy + ')');
             reject(err);
           }
-          writeLog('LOG', 'ウォレットDBへアドレスを登録しました')
+          writeLog('LOG', 'ウォレットDBへアドレスを登録しました (id: ' + id + ', address: ' + address + ', add_by: ' + addBy + ')');
           resolve();
         }
       );

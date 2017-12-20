@@ -54,6 +54,40 @@ const init = async () => {
     const thisLevel = XPBot.config.permLevels[i];
     XPBot.levelCache[thisLevel.name] = thisLevel.level;
   }
+  
+  // 本家Bot遅延監視
+  let wi = {
+    'general': {
+      condCounterIncrement: (msg) => {
+        const MainBotPrefix = ',';
+        const args = msg.content.slice(MainBotPrefix.length).split(/ +/g);
+        const command = args.shift().toLowerCase();
+        const MainBotCommands = ['balance'];
+        
+        let res = MainBotCommands.includes(command);
+        console.log(msg.content, res);
+        return res;
+      },
+      condCounterReset: (msg, current) => {
+        return false; 
+      }, 
+      numCheck: 20//, 
+      /*funcCheck: (XPBot, msg) => {
+        console.log('Check!');
+      }*/
+    }
+  };
+  
+  let li = {
+    'general': {
+      execute: (XPBot, msg) => {
+        console.log('execute!');
+      }
+    }
+  };
+  
+  XPBot.botWatcher = [];
+  XPBot.botWatcher['MainBot'] = require("./modules/botWatcher.js")(XPBot, wi, li);
 
   // ログイン
   XPBot.login(XPBot.config.token);
