@@ -9,6 +9,9 @@ const EnmapLevel = require("enmap-level");
 
 const XPBot = new Discord.Client();
 
+// 起動完了判定の初期化
+XPBot.ready = false;
+
 // 設定ファイル読み込み
 XPBot.config = require("./config.js");
 
@@ -54,6 +57,9 @@ const init = async () => {
 
   // ログイン
   XPBot.login(XPBot.config.token);
+  
+  // 起動完了
+  XPBot.ready = true;
 
   // トップレベルasync/await関数の終了
 };
