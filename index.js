@@ -18,6 +18,7 @@ XPBot.config = require("./config.js");
 // 内部処理用関数読み込み
 require("./modules/functions.js")(XPBot);
 require("./modules/balanceDB.js")(XPBot);
+require("./modules/emojis.js")(XPBot);
 
 // エイリアス・コマンドを格納
 XPBot.commands = new Enmap();
@@ -64,9 +65,7 @@ const init = async () => {
         const command = args.shift().toLowerCase();
         const MainBotCommands = ['balance'];
         
-        let res = MainBotCommands.includes(command);
-        console.log(msg.content, res);
-        return res;
+        return MainBotCommands.includes(command);
       },
       condCounterReset: (msg, current) => {
         return false; 
