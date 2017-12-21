@@ -35,7 +35,11 @@ module.exports = (XPBot) => {
   XPBot.log = (type, msg, title) => {
     let now = moment().format('YYYY-MM-DD HH:mm:ss.SS');
     if(!title) title = "Log";
-    console.log(`[${now}][${type}] [${title}]${msg}`);
+    
+    let str = `[${now}][${type}] [${title}]${msg}`;
+    if(title == 'ERR') console.error(str);
+    else console.log(str);
+    //console.log(`[${now}][${type}] [${title}]${msg}`);
   };
   
   XPBot.getFrontendLogChannel = (guild) => {
