@@ -37,7 +37,7 @@ module.exports = (XPBot) => {
     if(!title) title = "Log";
     
     let str = `[${now}][${type}] [${title}]${msg}`;
-    if(title == 'ERR') console.error(str);
+    if(title == 'ERR' || title == 'WAR') console.error(str);
     else console.log(str);
     //console.log(`[${now}][${type}] [${title}]${msg}`);
   };
