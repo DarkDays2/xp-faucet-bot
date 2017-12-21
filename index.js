@@ -70,17 +70,19 @@ const init = async () => {
       condCounterReset: (msg, current) => {
         return false; 
       }, 
-      numCheck: 20//, 
-      /*funcCheck: (XPBot, msg) => {
-        console.log('Check!');
-      }*/
+      numCheck: 10
     }
   };
   
   let li = {
     'general': {
       execute: (XPBot, msg) => {
-        console.log('execute!');
+        //console.log('execute!');
+        //XPBot.getFrontendLogChannel().send('');
+        let settings = msg.guild ? XPBot.settings.get(msg.guild.id) : XPBot.config.defaultSettings;
+        let mod = msg.guild.roles.find('name', settings.modRole);
+        XPBot.getFrontendLogChannel().send(`<@&${mod.id}> 遅延が20分を超えました。予定ではここから20分～30分間制限をかけるようにしようと思います。`);
+        
       }
     }
   };
