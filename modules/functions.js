@@ -33,9 +33,15 @@ module.exports = (XPBot) => {
   Logs to console. Future patches may include time+colors
   */
   XPBot.log = (type, msg, title) => {
-    let now = moment().format('YYYY-MM-DD HH:mm:ss:SS');
+    let now = moment().format('YYYY-MM-DD HH:mm:ss.SS');
     if(!title) title = "Log";
     console.log(`[${now}][${type}] [${title}]${msg}`);
+  };
+  
+  XPBot.getFrontendLogChannel = (guild) => {
+    const settings = guild ? XPBot.settings.get(guild.id) : XPBot.config.defaultSettings;
+    let logChannel = guild.channels.find('name', settings.modLogChannel);
+    return logChannel;
   };
 
 
