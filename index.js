@@ -9,12 +9,16 @@ const EnmapLevel = require("enmap-level");
 
 const XPBot = new Discord.Client();
 
+// 起動完了判定の初期化
+XPBot.ready = false;
+
 // 設定ファイル読み込み
 XPBot.config = require("./config.js");
 
 // 内部処理用関数読み込み
 require("./modules/functions.js")(XPBot);
 require("./modules/balanceDB.js")(XPBot);
+require("./modules/emojis.js")(XPBot);
 
 // エイリアス・コマンドを格納
 XPBot.commands = new Enmap();
@@ -51,9 +55,44 @@ const init = async () => {
     const thisLevel = XPBot.config.permLevels[i];
     XPBot.levelCache[thisLevel.name] = thisLevel.level;
   }
+  
+  // 本家Bot遅延監視
+  let wi = {
+    'general': {
+      condCounterIncrement: (msg) => {
+        const MainBotPrefix = ',';
+        const args = msg.content.slice(MainBotPrefix.length).split(/ +/g);
+        const command = args.shift().toLowerCase();
+        const MainBotCommands = ['balance'];
+        
+        return MainBotCommands.includes(command);
+      },
+      condCounterReset: (msg, current) => {
+        return false; 
+      }, 
+      numCheck: 20//, 
+      /*funcCheck: (XPBot, msg) => {
+        console.log('Check!');
+      }*/
+    }
+  };
+  
+  let li = {
+    'general': {
+      execute: (XPBot, msg) => {
+        console.log('execute!');
+      }
+    }
+  };
+  
+  XPBot.botWatcher = [];
+  XPBot.botWatcher['MainBot'] = require("./modules/botWatcher.js")(XPBot, wi, li);
 
   // ログイン
   XPBot.login(XPBot.config.token);
+  
+  // 起動完了
+  XPBot.ready = true;
 
   // トップレベルasync/await関数の終了
 };
