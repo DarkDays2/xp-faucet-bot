@@ -1,12 +1,12 @@
 exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-unused-vars
-  let msgDie = await message.reply("XPFaucetBotはシャットダウンしています");
+  //let msgDie = await message.reply("XPFaucetBotはシャットダウンしています");
   
   XPBot.commands.forEach( async cmd => {
     await XPBot.unloadCommand(cmd);
   });
   await XPBot.db.walletDB.closeFromDB()
-    .then(()=> message.reply("XPFaucetBotはシャットダウンしました"))
-    .then(()=> msgDie.delete())
+    .then(()=> message.reply("XPFaucetBotはシャットダウンできます"))
+    //.then(()=> msgDie.delete())
     .then(()=> XPBot.user.setStatus("invisible"));
   //process.exit(1);
   XPBot.ready = false;
@@ -22,6 +22,6 @@ exports.conf = {
 exports.help = {
   name: "die",
   category: "システム",
-  description: "Botをシャットダウンします。PM2下では自動的に再起動します。",
+  description: "Botを終了待機状態にします。",
   usage: "die"
 };
