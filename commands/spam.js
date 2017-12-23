@@ -22,7 +22,7 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
     return;
   }
   
-  sendSpam.spamWithTempLock(
+  sendSpam(
     XPBot,
     guild,
     channels,

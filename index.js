@@ -90,7 +90,7 @@ const init = async () => {
             '解除予定時刻: ' + endTime + 'ごろ';
         
         const sendSpam = require('./modules/sendSpam.js');
-        sendSpam.spamWithTempLock(
+        sendSpam(
           XPBot,
           msg.guild,
           ['bot-spam', 'bot-spam2'],

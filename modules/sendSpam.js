@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 //var sqlite3 = require('sqlite3');
 
-module.exports.spamWithTempLock = function(XPBot, guild, channels, message, sendOption, funcAfterEach, funcAfterAll, spamOption) {
+module.exports = function(XPBot, guild, channels, message, sendOption, funcAfterEach, funcAfterAll, spamOption) {
   let channelsToSpam = guild.channels.filterArray((elem, index, array) => {
     return channels.includes(elem.name);
   });
