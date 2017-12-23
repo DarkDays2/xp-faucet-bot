@@ -84,7 +84,7 @@ class BotWatcher{
     writeLog('End Wacthing', durationStr);
     this._XPBot.getFrontendLogChannel(message.guild).send(logStr);
     
-    if(duration >= 20 * 60 * 1000){
+    if(duration >= 10 * 60 * 1000){
       this._limitingInfo['general'].execute(this._XPBot, message);
       this._counter['general'] = 0;
       this._counterUntilLimit['general'] = 0;
