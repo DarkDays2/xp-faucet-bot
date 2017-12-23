@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 //var sqlite3 = require('sqlite3');
 var writeLog;
 
-let _sendSpam = function(XPBot, guild, channels, message, sendOption, funcAfterEach, funcAfterAll, spamOption) {
+var _sendSpam = function(XPBot, guild, channels, message, sendOption, funcAfterEach, funcAfterAll, spamOption) {
   let channelsToSpam = guild.channels.filterArray((elem, index, array) => {
     return channels.includes(elem.name);
   });
