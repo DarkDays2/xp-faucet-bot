@@ -6,8 +6,6 @@ const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const Enmap = require("enmap");
 const EnmapLevel = require("enmap-level");
-const moment = require("moment");
-require("moment-duration-format");
 
 const XPBot = new Discord.Client();
 
@@ -72,7 +70,7 @@ const init = async () => {
       condCounterReset: (msg, current) => {
         return false; 
       }, 
-      numCheck: 15
+      numCheck: 10
     }
   };
   
@@ -81,27 +79,9 @@ const init = async () => {
       execute: (XPBot, msg) => {
         //console.log('execute!');
         //XPBot.getFrontendLogChannel().send('');
-        let settings = XPBot.getGuildSettings(msg.guild);
+        let settings = msg.guild ? XPBot.settings.get(msg.guild.id) : XPBot.config.defaultSettings;
         let mod = msg.guild.roles.find('name', settings.modRole);
-        XPBot.getFrontendLogChannel(msg.guild).send(`<@&${mod.id}> 遅延が10分を超えました。`);
-        
-        let endTime = moment().second(0).add(10, 'm').format('HH[時]mm[分]');
-        let limitMsg = ':lock: 本家Botの遅延時間が大きくなったため、\r\nこのチャンネルへのメッセージ送信を制限しています。\r\n\r\n' + 
-            '解除予定時刻: ' + endTime + 'ごろ';
-        
-        const sendSpam = require('./modules/sendSpam.js');
-        sendSpam(
-          XPBot,
-          msg.guild,
-          ['bot-spam', 'bot-spam2'],
-          limitMsg,
-          null, //sendOption
-          null, //funcAfterEach
-          () => { //funcAfterAll
-            XPBot.log('BW', '制限終了', 'Log');
-          },
-          {waitBefore: 500, waitAfter: 10 * 60 * 1000}
-        );
+        XPBot.getFrontendLogChannel().send(`<@&${mod.id}> 遅延が20分を超えました。予定ではここから20分～30分間制限をかけるようにしようと思います。`);
         
       }
     }

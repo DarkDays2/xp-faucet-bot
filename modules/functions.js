@@ -47,10 +47,7 @@ module.exports = (XPBot) => {
     let logChannel = guild.channels.find('name', settings.modLogChannel);
     return logChannel;
   };
-  
-  XPBot.getGuildSettings = (guild) =>{
-    return guild ? XPBot.settings.get(guild.id) : XPBot.config.defaultSettings;
-  }
+
 
   /*
   SINGLE-LINE AWAITMESSAGE
