@@ -56,7 +56,7 @@ module.exports.initTB = function(XPBot, db, tablename, logname, columnQuery){
   create.then(x=>{
     if(!x){
       db.run('CREATE TABLE ' + tablename + '(' + columnQuery + ')');
-      writeLog('LOG', '本家Bot用アドレステーブルを作成しました');
+      writeLog('LOG', logname + 'を作成しました');
     }
   }).catch(err =>{
     console.error(err);
