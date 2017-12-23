@@ -1,13 +1,16 @@
 const Discord = require("discord.js");
 //var sqlite3 = require('sqlite3');
+var writeLog;
 
-module.exports = function(XPBot, guild, channels, message, sendOption, funcAfterEach, funcAfterAll, spamOption) {
+let _sendSpam = function(XPBot, guild, channels, message, sendOption, funcAfterEach, funcAfterAll, spamOption) {
   let channelsToSpam = guild.channels.filterArray((elem, index, array) => {
     return channels.includes(elem.name);
   });
-  
-  let everyoneRole = guild.roles.find('name', '@everyone');
 
+  let everyoneRole = guild.roles.find('name', '@everyone');
+  
+  let sendPermAfterSpam = typeof spamOption.permAfter !== "undefined" ? spamOption.permAfter : true;
+ 
   //console.log(channelsToGo);
 
   Promise.all(
@@ -23,7 +26,7 @@ module.exports = function(XPBot, guild, channels, message, sendOption, funcAfter
         await XPBot.wait(spamOption.waitAfter || 0);
         return chnl.overwritePermissions(
           everyoneRole,
-          {'SEND_MESSAGES': true}
+          {'SEND_MESSAGES': sendPermAfterSpam}
         ).then(() => msg);
       }).then(msg=>{
         chnl.stopTyping();
@@ -33,8 +36,10 @@ module.exports = function(XPBot, guild, channels, message, sendOption, funcAfter
   ).then(()=>{
     if(funcAfterAll) funcAfterAll();
   });
-  
-  const writeLog = (title, contents)=>{
+
+  writeLog = (title, contents)=>{
     XPBot.log('SPAM', contents, title);
   };
 };
+
+module.exports = _sendSpam;
