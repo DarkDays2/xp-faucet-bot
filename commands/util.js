@@ -47,6 +47,8 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     ).then(()=>{
       XPBot.log('Util', `合計${args.length}チャンネルでのタイピングを終了しました`, 'Log');
     });
+  } else if(subCmdName == 'bal'){
+    XPBot.getFrontendLogChannel(message.guild).send(',balance');
   }
 };
 
