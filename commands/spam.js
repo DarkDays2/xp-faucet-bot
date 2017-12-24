@@ -12,7 +12,7 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
   
   
   
-  if(spamMsg.indexOf(settings.prefix) === 0){
+  if(spamMsg.indexOf(',') === 0){
     message.reply(':cop: 水道局に何をする―');
     return;
   }
