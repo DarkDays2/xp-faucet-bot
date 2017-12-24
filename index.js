@@ -93,9 +93,9 @@ const init = async () => {
         let settings = XPBot.getGuildSettings(msg.guild);
         let botOwner = XPBot.config.ownerID;
         let mod = msg.guild.roles.find('name', settings.modRole);
-        XPBot.getFrontendLogChannel(msg.guild).send(`<@&${mod.id}> <@${botOwner}> 遅延が10分を超えました。`);
+        XPBot.getFrontendLogChannel(msg.guild).send(`<@&${mod.id}> <@${botOwner}> 遅延が15分を超えました。`);
         
-        let endTime = moment().second(0).add(5, 'm').format('HH[時]mm[分]');
+        let endTime = moment().second(0).add(8, 'm').format('HH[時]mm[分]');
         let limitMsg = ':lock: 本家Botの遅延時間が大きくなったため、\r\nこのチャンネルへのメッセージ送信を制限しています。\r\n\r\n' + 
             '解除予定時刻: ' + endTime + 'ごろ';
         
@@ -111,7 +111,7 @@ const init = async () => {
             XPBot.limitBotSpam = false;
             XPBot.log('BW', '制限終了', 'Log');
           },
-          {waitBefore: 500, waitAfter: 5 * 60 * 1000}
+          {waitBefore: 500, waitAfter: 8 * 60 * 1000}
         );
         
       }
