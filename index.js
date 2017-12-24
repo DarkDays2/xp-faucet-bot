@@ -58,6 +58,8 @@ const init = async () => {
     XPBot.levelCache[thisLevel.name] = thisLevel.level;
   }
   
+  XPBot.limitBotSpam = false;
+  
   // 本家Bot遅延監視
   let wi = {
     'general': {
@@ -79,6 +81,13 @@ const init = async () => {
   let li = {
     'general': {
       execute: (XPBot, msg) => {
+        if(XPBot.limitBotSpam) {
+          XPBot.log('BW', '既に制限中', 'WAR');
+          return;
+        }
+        
+        XPBot.limitBotSpam = true;
+        
         //console.log('execute!');
         //XPBot.getFrontendLogChannel().send('');
         let settings = XPBot.getGuildSettings(msg.guild);
@@ -86,7 +95,7 @@ const init = async () => {
         let mod = msg.guild.roles.find('name', settings.modRole);
         XPBot.getFrontendLogChannel(msg.guild).send(`<@&${mod.id}> <@${botOwner}> 遅延が10分を超えました。`);
         
-        let endTime = moment().second(0).add(10, 'm').format('HH[時]mm[分]');
+        let endTime = moment().second(0).add(5, 'm').format('HH[時]mm[分]');
         let limitMsg = ':lock: 本家Botの遅延時間が大きくなったため、\r\nこのチャンネルへのメッセージ送信を制限しています。\r\n\r\n' + 
             '解除予定時刻: ' + endTime + 'ごろ';
         
@@ -99,9 +108,10 @@ const init = async () => {
           null, //sendOption
           null, //funcAfterEach
           () => { //funcAfterAll
+            XPBot.limitBotSpam = false;
             XPBot.log('BW', '制限終了', 'Log');
           },
-          {waitBefore: 500, waitAfter: 10 * 60 * 1000}
+          {waitBefore: 500, waitAfter: 5 * 60 * 1000}
         );
         
       }
