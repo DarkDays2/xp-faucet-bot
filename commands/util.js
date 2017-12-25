@@ -1,8 +1,8 @@
 const sendSpam = require('../modules/sendSpam.js');
 exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-unused-vars
-  
+
   let subCmdName = args.shift();
-  
+
   if(subCmdName == 'lockcnl'){
     sendSpam(
       XPBot,
@@ -49,6 +49,12 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     });
   } else if(subCmdName == 'bal'){
     XPBot.getFrontendLogChannel(message.guild).send(',balance');
+  } else if(subCmdName == 'del'){
+    let channel = message.channel;
+    channel.fetchMessage(args[0])
+      .then(msg=> msg.delete())
+      .then(e => message.delete());
+    return;
   }
 };
 
