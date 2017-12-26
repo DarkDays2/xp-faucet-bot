@@ -51,10 +51,46 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     XPBot.getFrontendLogChannel(message.guild).send(',balance');
   } else if(subCmdName == 'del'){
     let channel = message.channel;
-    channel.fetchMessage(args[0])
+
+    message.delete()
+      .then(()=>{
+      return Promise.all(
+        args.map(msgId => {
+          channel.fetchMessage(msgId)
+            .then(msg => msg.delete());
+        })
+      );
+    });
+
+    /*channel.fetchMessage(args[0])
       .then(msg=> msg.delete())
       .then(e => message.delete());
     return;
+
+
+    Promise.all(
+      channelsToSpam.map((chnl) => {
+        chnl.startTyping();
+        return chnl.overwritePermissions(
+          everyoneRole,
+          {'SEND_MESSAGES': false}
+        ).then(async ()=>{
+          await XPBot.wait(spamOption.waitBefore || 0);
+          return chnl.send(message, sendOption);
+        }).then(async msg => {
+          await XPBot.wait(spamOption.waitAfter || 0);
+          return chnl.overwritePermissions(
+            everyoneRole,
+            {'SEND_MESSAGES': sendPermAfterSpam}
+          ).then(() => msg);
+        }).then(msg=>{
+          chnl.stopTyping();
+          if(funcAfterEach) funcAfterEach(msg);
+        })
+      })
+    ).then(()=>{
+      if(funcAfterAll) funcAfterAll();
+    });*/
   }
 };
 
