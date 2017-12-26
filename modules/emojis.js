@@ -1,6 +1,32 @@
 module.exports = (XPBot) => {
   XPBot.emojisByName = {
     'stopwatch': '\u23f1',
-    'timer': '\u23f2'
+    'timer': '\u23f2',
+    'regional_indicator_a': '\u1f1e6',
+    'regional_indicator_b': '\u1f1e7',
+    'regional_indicator_c': '\u1f1e8',
+    'regional_indicator_d': '\u1f1e9',
+    'regional_indicator_e': '\u1f1ea',
+    'regional_indicator_f': '\u1f1eb',
+    'regional_indicator_g': '\u1f1ec',
+    'regional_indicator_h': '\u1f1ed',
+    'regional_indicator_i': '\u1f1ee',
+    'regional_indicator_j': '\u1f1ef',
+    'regional_indicator_k': '\u1f1f0',
+    'regional_indicator_l': '\u1f1f1',
+    'regional_indicator_m': '\u1f1f2',
+    'regional_indicator_n': '\u1f1f3',
+    'regional_indicator_o': '\u1f1f4',
+    'regional_indicator_p': '\u1f1f5',
+    'regional_indicator_q': '\u1f1f6',
+    'regional_indicator_r': '\u1f1f7',
+    'regional_indicator_s': '\u1f1f8',
+    'regional_indicator_t': '\u1f1f9',
+    'regional_indicator_u': '\u1f1fa',
+    'regional_indicator_v': '\u1f1fb',
+    'regional_indicator_w': '\u1f1fc',
+    'regional_indicator_x': '\u1f1fd',
+    'regional_indicator_y': '\u1f1fe',
+    'regional_indicator_z': '\u1f1ff'
   };
 };
