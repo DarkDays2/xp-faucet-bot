@@ -2,7 +2,7 @@
 
 module.exports = function(XPBot) {
   const sqlite = require('../modules/dbutil.js');
-  if(!XPBot.db) XPBot.db = new Object();
+  if(!XPBot.db) XPBot.db = {};
   
   XPBot.db.walletDB = sqlite.initDB(XPBot, './db/XpDiscordWallet.db');
 
