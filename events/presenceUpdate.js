@@ -17,16 +17,9 @@ module.exports = (XPBot, oldUser, newUser) => {
       var guild = XPBot.guilds.get(newUser.guild.id);
       var chat2 = guild.channels.find('name', 'chat_2');
       if(chat2){
-        chat2.send('<@352230801741578240> 嬢 おはよ！わよ！');
+        chat2.send('<@352230801741578240> 嬢 おはよ！わよ');
       }
       
     }
-    /*if(newUser.id == '353169534984912896' && newUser.presence.status == 'online') {
-      var guild = XPBot.guilds.get(newUser.guild.id);
-      var chat2 = guild.channels.find('name', 'bot_control');
-      if(chat2){
-        chat2.send('<@353169534984912896> 嬢 おはよ！わよ！');
-      }
-    }*/
   }
 };
