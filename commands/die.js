@@ -4,12 +4,26 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
   XPBot.commands.forEach( async cmd => {
     await XPBot.unloadCommand(cmd);
   });
-  await XPBot.db.walletDB.closeFromDB()
+  
+  /*XPBot.db.forEach(async db =>{
+    await db.closeFromDB();
+  });*/
+  
+  for(dbName in XPBot.db){
+    await XPBot.db[dbName].closeFromDB();
+  }
+  message.reply("XPFaucetBotはシャットダウンできます")
+    .then(()=> {
+    XPBot.user.setStatus("invisible");
+    XPBot.ready = false;
+  });
+  
+  /*await XPBot.db.walletDB.closeFromDB()
     .then(()=> message.reply("XPFaucetBotはシャットダウンできます"))
     //.then(()=> msgDie.delete())
-    .then(()=> XPBot.user.setStatus("invisible"));
+    .then(()=> XPBot.user.setStatus("invisible"));*/
   //process.exit(1);
-  XPBot.ready = false;
+  
 };
 
 exports.conf = {

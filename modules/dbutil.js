@@ -3,7 +3,7 @@ var writeLog;
 
 module.exports.initDB = function(XPBot, filename) {
   writeLog = (title, contents)=>{
-    XPBot.log('db', contents, title);
+    XPBot.log('DB', contents, title);
   };
   
   let db = new sqlite3.Database(filename, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err)=>{
@@ -19,10 +19,10 @@ module.exports.initDB = function(XPBot, filename) {
     return new Promise((resolve, reject) => {
       try{
         XPBot.db.walletDB.close();
-        writeLog('LOG', 'ウォレットDBから切断しました', );
+        writeLog('LOG', filename + 'から切断しました', );
         resolve();
       } catch(ex){
-        writeLog('ERR', 'ウォレットDBの切断処理中にエラーが発生しました', );
+        writeLog('ERR', filename + 'の切断処理中にエラーが発生しました', );
         reject(ex);
       }
     });
