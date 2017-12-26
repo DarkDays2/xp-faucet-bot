@@ -20,7 +20,11 @@ XPBot.config = require("./config.js");
 // 内部処理用関数読み込み
 require("./modules/functions.js")(XPBot);
 require("./modules/balanceDB.js")(XPBot);
+require("./modules/scheduler.js")(XPBot);
 require("./modules/emojis.js")(XPBot);
+
+// タスクスケジューラー読み込み
+XPBot.db.taskScdDB.loadTasksNotYet();
 
 // エイリアス・コマンドを格納
 XPBot.commands = new Enmap();
