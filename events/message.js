@@ -22,9 +22,24 @@ module.exports = (XPBot, message) => {
           .catch((ex)=>{
           //message.channel.send('DBに登録失敗');
         });
-        
-        XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'balance');
+
+        return;
+
+        //XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'balance');
       }
+      
+      if(message.embeds[0]){
+        let msgAuthor = message.embeds[0].author.name;
+        if(msgAuthor === 'Transaction Sent'){
+          let userID = message.mentions.users.first().id;
+          
+          //console.log(message.content, userID, 'tip');
+
+          XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'tip');
+
+        }
+      }
+
     }
   } else{
     /*if(message.content.includes("わよ！")){
@@ -41,11 +56,11 @@ module.exports = (XPBot, message) => {
 
     // コマンド・関数内で使いやすいように、message.settingsに設定オブジェクトを関連付ける
     message.settings = settings;
-    
+
     // ユーザーもしくはメンバーの権限を取得
     const level = XPBot.permlevel(message);
     const MainBotPrefix = ',';
-    
+
     if(message.content.indexOf(settings.prefix) === 0){
       // コマンド名と引数を分離
       // 例: 「+say Is this the real life?」
@@ -88,6 +103,8 @@ module.exports = (XPBot, message) => {
       const args = message.content.slice(MainBotPrefix.length).trim().split(/ +/g);
       const command = args.shift().toLowerCase();
       
+      //console.log(message.content, command);
+
       XPBot.botWatcher['MainBot'].notifyCommand(message, command);
     }
   }

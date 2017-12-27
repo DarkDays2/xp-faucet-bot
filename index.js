@@ -71,14 +71,14 @@ const init = async () => {
         const MainBotPrefix = ',';
         const args = msg.content.slice(MainBotPrefix.length).split(/ +/g);
         const command = args.shift().toLowerCase();
-        const MainBotCommands = ['balance'];
+        const MainBotCommands = ['tip'];
         
         return MainBotCommands.includes(command);
       },
       condCounterReset: (msg, current) => {
         return false; 
       }, 
-      numCheck: 15
+      numCheck: 10
     }
   };
   
