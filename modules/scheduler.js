@@ -11,15 +11,52 @@ module.exports = function(XPBot) {
 
   XPBot.db.taskScdDB = sqlite.initDB(XPBot, './db/TaskScheduler.db');
 
+  //============================================================
+  //============================================================
   const funcWrap = origFuncInfo => {
     writeLog('Log', 'タスク(' + origFuncInfo.taskId + ')の実行を開始しました');
+    let _XPBot = XPBot; //origFuncInfo.XPBot;
+    //console.log(_XPBot);
+    
     if(origFuncInfo.cmdName == 'radioset'){
 
+    } else if(origFuncInfo.cmdName == 'radio_ts'){
+      // guild: guildname
+      // channel: channelname
+      // date: date
+      let p = origFuncInfo.params;
+      let radioGuild = _XPBot.guilds.find('name', p.guild);
+      let radioCnl = radioGuild.channels.find(val => {
+        return val.type === 'voice' && val.name === p.channel;
+      });
+
+      radioCnl.join()
+        .then(async connection => { // Connection is an instance of VoiceConnection
+        
+        let nowTime = Date.now();
+        let startTime = new Date(p.date);
+        let wait = startTime - nowTime - 10000 - 500;
+        
+        if(wait < 0){
+          console.error('超過');
+          return;
+        } 
+        
+        await _XPBot.wait(wait);
+        const dispatcher = connection.playFile("././assets/TimeSignal2_00.mp3");
+
+        dispatcher.on('end', res => {
+          //radioCnl.leave();
+        });
+      }).catch(console.log);
     }
     writeLog('Log', 'タスク(' + origFuncInfo.taskId + ')の実行を終了しました');
+    console.log(origFuncInfo.afterStat);
     XPBot.db.taskScdDB.setStatusById(origFuncInfo.taskId, origFuncInfo.afterStat, 'all');
     XPBot.scdTasks.delete(origFuncInfo.taskId);
   };
+  //============================================================
+  //============================================================
 
   // dateはJSのDate, resend_byはnullでresend無効、0で強制resend
   XPBot.db.taskScdDB.registerTask = async (date, cmd, params, note, resend_by) => {
@@ -31,7 +68,7 @@ module.exports = function(XPBot) {
     } else{
       let dateMoment = moment(date).format('YYYY-MM-DD HH:mm:ss');
 
-      let j = scd.scheduleJob(date, funcWrap.bind(null, {taskId: id, cmdName: cmd, params: params, afterStat: 'done'}));
+      let j = scd.scheduleJob(date, funcWrap.bind(null, {XPBot: XPBot, taskId: id, cmdName: cmd, params: params, afterStat: 'done'}));
 
       XPBot.scdTasks.set(id, j);
 
@@ -174,12 +211,16 @@ module.exports = function(XPBot) {
       writeLogDB('ERR', 'タスク(' + id + ')は' + tname + 'に存在しません');
       return;
     }
-
+    
     if(tname == 'all'){
-      tname = typeof exist.resend_by !== undefined ? 'resend' : 'noresend';
-      //if(typeof exist.resend_by undefined)
+      if(typeof exist.resend_by !== 'undefined'){
+        tname = 'resend';
+      } else{
+        tname = 'noresend';
+      }
     }
-
+    console.log(tname);
+    
     if(tname == 'resend'){
       let res = await _setStatusByIdFromResend(id, status);
       return res;
@@ -222,16 +263,20 @@ module.exports = function(XPBot) {
 
         if(task.resend_by === 0 || resendMon.isAfter(nowMon)){
           writeLog('Resent', '遅延許可タスク(' + id + ')を遅延実行しました');
-          funcWrap({taskId: id, cmdName: task.cmd, params: task.params, afterStat: 'resent'});
+          funcWrap({XPBot: XPBot, taskId: id, cmdName: task.cmd, params: task.params, afterStat: 'resent'});
         }else{
           XPBot.db.taskScdDB.setStatusById(id, 'canceled', 'resend');
         }
         return;
       }
 
-      let j = scd.scheduleJob(task.date, funcWrap.bind(null, {taskId: id, cmdName: task.cmd, params: task.params, afterStat: 'done'}));
+      let j = scd.scheduleJob(task.date, funcWrap.bind(null, {XPBot: XPBot, taskId: id, cmdName: task.cmd, params: task.params, afterStat: 'done'}));
 
       XPBot.scdTasks.set(id, j);
+      
+      let info = '(' + id + ')'
+      
+      writeLogDB('Log', 'タスクスケジュールDBへ遅延許可タスクを再登録しました ' + info);
     }
   };
 
@@ -259,9 +304,13 @@ module.exports = function(XPBot) {
         return;
       }
 
-      let j = scd.scheduleJob(task.date, funcWrap.bind(null, {taskId: id, cmdName: task.cmd, params: task.params, afterStat: 'done'}));
+      let j = scd.scheduleJob(task.date, funcWrap.bind(null, {XPBot: XPBot, taskId: id, cmdName: task.cmd, params: task.params, afterStat: 'done'}));
 
       XPBot.scdTasks.set(id, j);
+      
+      let info = '(' + id + ')'
+
+      writeLogDB('Log', 'タスクスケジュールDBへ期限厳守タスクを再登録しました ' + info);
     }
   };
 
@@ -273,7 +322,11 @@ module.exports = function(XPBot) {
     }
 
     if(tname == 'all'){
-      tname = typeof exist.resend_by !== 'undefined' ? 'resend' : 'noresend';
+      if(typeof exist.resend_by !== 'undefined'){
+        tname = 'resend';
+      } else{
+        tname = 'noresend';
+      }
     }
 
     if(tname == 'resend'){
@@ -301,12 +354,12 @@ module.exports = function(XPBot) {
         {},
         function(err, res){
           if(err) console.error(err);
-          
+
           console.log(res);
           XPBot.db.taskScdDB.loadTaskById(res.id, 'resend');
         }
       );
-      
+
       XPBot.db.taskScdDB.each(
         'SELECT id FROM tasks_noresend where status IS NULL',
         {},
@@ -318,39 +371,6 @@ module.exports = function(XPBot) {
         }
       );
     });
-
-
-    /*new Promise((resolve, reject) => {
-      XPBot.db.taskScdDB.serialize(function(){
-        XPBot.db.taskScdDB.all(
-          'SELECT id FROM tasks_resend where status IS NULL',
-          {},
-          function(err, res){
-            if(err) reject(err);
-            resolve(res);
-          }
-        );
-      });
-    }).then(res => {
-      let notYetIds = res;
-      console.log(notYetIds);
-    });*/
-
-    
-    /*new Promise((resolve, reject) => {
-      XPBot.db.taskScdDB.serialize(function(){
-        XPBot.db.taskScdDB.get(
-          'SELECT id FROM tasks_resend where status IS NULL',
-          {},
-          function(err, res){
-            if(err) reject(err);
-            resolve(res);
-          }
-        );
-      });
-    });*/
-
-
   };
 
   sqlite.initTB(
@@ -365,7 +385,7 @@ module.exports = function(XPBot) {
     XPBot, 
     XPBot.db.taskScdDB, 
     'tasks_noresend', 
-    '締切厳守タスクスケジュールテーブル',
+    '期限厳守タスクスケジュールテーブル',
     'id INTEGER PRIMARY KEY, date TEXT NOT NULL, cmd TEXT NOT NULL, params TEXT, note TEXT, status TEXT'
   );
 
