@@ -23,7 +23,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
       XPBot,
       message.guild,
       args, // args[1] - args[n]
-      ':unlock: メッセージ送信を制限を解除しました。',
+      ':unlock: メッセージ送信の制限を解除しました。',
       null,
       msg => {
         XPBot.log('Util', `#${msg.channel.name}でのメッセージ送信制限を解除しました`, 'Log');
