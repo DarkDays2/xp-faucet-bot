@@ -20,38 +20,64 @@ module.exports = function(XPBot) {
     
     if(origFuncInfo.cmdName == 'radioset'){
 
-    } else if(origFuncInfo.cmdName == 'radio_ts'){
+    } else if(origFuncInfo.cmdName == 'radio_ts' || origFuncInfo.cmdName == 'radio_bgm'){
       // guild: guildname
       // channel: channelname
       // date: date
+      // (ts)code: code of timesignal
+      // (bgm)bgm: name of bgm
       let p = origFuncInfo.params;
       let radioGuild = _XPBot.guilds.find('name', p.guild);
       let radioCnl = radioGuild.channels.find(val => {
         return val.type === 'voice' && val.name === p.channel;
       });
+      
+      try{
+        radioCnl.leave();
+      } catch(e){
+        console.error(e);
+      }
+      
+      if(origFuncInfo.cmdName == 'radio_ts'){
+        let tsCode = p.code;
+        let waitOfCodes = {
+          'chiku_sto': 10 * 1000,
+          'xp_channel': 44 * 1000
+        }
 
-      radioCnl.join()
-        .then(async connection => { // Connection is an instance of VoiceConnection
-        
-        let nowTime = Date.now();
-        let startTime = new Date(p.date);
-        let wait = startTime - nowTime - 10000 - 500;
-        
-        if(wait < 0){
-          console.error('超過');
-          return;
-        } 
-        
-        await _XPBot.wait(wait);
-        const dispatcher = connection.playFile("././assets/TimeSignal2_00.mp3");
+        radioCnl.join()
+          .then(async connection => {
+          let nowTime = Date.now();
+          let startTime = new Date(p.date);
+          let wait = startTime - nowTime - waitOfCodes[tsCode];
 
-        dispatcher.on('end', res => {
-          //radioCnl.leave();
-        });
-      }).catch(console.log);
+          if(wait < 0){
+            console.error('超過');
+            return;
+          } 
+
+          await _XPBot.wait(wait);
+          const dispatcher = connection.playFile("././assets/TimeSignal_" + tsCode + ".mp3", { volume: 0.5 });
+          dispatcher.on('end', res => {
+            //radioCnl.leave();
+          });
+        }).catch(console.log);
+      } else{
+        let bgmName = p.bgm;
+        
+        radioCnl.join()
+          .then(async connection => {
+          await _XPBot.wait(50);
+          const dispatcher = connection.playFile("././assets/BGM-" + bgmName + ".mp3", { volume: 0.1 });
+
+          dispatcher.on('end', res => {
+            //radioCnl.leave();
+          });
+        }).catch(console.log);
+      }
     }
     writeLog('Log', 'タスク(' + origFuncInfo.taskId + ')の実行を終了しました');
-    console.log(origFuncInfo.afterStat);
+    //console.log(origFuncInfo.afterStat);
     XPBot.db.taskScdDB.setStatusById(origFuncInfo.taskId, origFuncInfo.afterStat, 'all');
     XPBot.scdTasks.delete(origFuncInfo.taskId);
   };
@@ -219,7 +245,7 @@ module.exports = function(XPBot) {
         tname = 'noresend';
       }
     }
-    console.log(tname);
+    //console.log(tname);
     
     if(tname == 'resend'){
       let res = await _setStatusByIdFromResend(id, status);
