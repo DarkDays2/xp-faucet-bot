@@ -73,6 +73,13 @@ const init = async () => {
         const command = args.shift().toLowerCase();
         const MainBotCommands = ['tip'];
         
+        if(command == 'tip'){
+          let regTip = /,tip\u0020(?:<@!?\d+>|X\w+)\u0020\d+(?:\.\d*)?(?=\u0020)?/;
+          let regInfo = regTip.exec(msg.content);
+          console.log('Tip', regInfo != null);
+          return regInfo != null;
+        }
+        
         return MainBotCommands.includes(command);
       },
       condCounterReset: (msg, current) => {
@@ -104,7 +111,7 @@ const init = async () => {
             '解除予定時刻: ' + endTime + 'ごろ';
         
         const sendSpam = require('./modules/sendSpam.js');
-        sendSpam(
+        /*sendSpam(
           XPBot,
           msg.guild,
           ['bot-spam', 'bot-spam2'],
@@ -116,7 +123,7 @@ const init = async () => {
             XPBot.log('BW', '制限終了', 'Log');
           },
           {waitBefore: 500, waitAfter: 8 * 60 * 1000}
-        );
+        );*/
         
       }
     }
