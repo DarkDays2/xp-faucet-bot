@@ -53,8 +53,56 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
       let filenames = {
         'morning01': 'BGM-Morning01.mp3',
         'techno01': 'BGM-Techno01.mp3',
-        'atale': 'A Tale-001b.mp3'
+        'atale': 'A Tale-001b.mp3',
+        'akarui1': 'xp_akarui_hourly_loop.mp3',
+        'akarui2': 'xp_akarui_2_halfhourly_loop.mp3',
+        'wafu': 'xp_wafu_halfhourly_loop.mp3'
       };
+      
+      let vols = {
+        'morning01': 0.3,
+        'techno01': 0.3,
+        'atale': 0.1,
+        'akarui1': 0.04,
+        'akarui2': 0.04,
+        'wafu': 0.04
+      };
+      
+      //let param = args.shift();
+      let name = filenames[type];
+      
+      console.log(type);
+      
+      if(name){
+        var vol = vols[type];
+        
+        radioCnl.join().then(async connection => {
+          var streamOptions = { seek: 0, volume: vol };
+          //var stream = ytdl('https://www.youtube.com/watch?v=' + videoId, { filter : 'audioonly' });
+
+          await XPBot.wait(80);      
+          var dispatcher = connection.playFile("././assets/" + name, streamOptions);
+
+          dispatcher.on('start', async () => {
+            await XPBot.wait(1000);
+            
+            let msgs = {
+              'morning01': '',
+              'techno01': '',
+              'atale': '',
+              'akarui1': 'BGM提供: <@390069961340616704>さん',
+              'akarui2': 'BGM提供: <@390069961340616704>さん',
+              'wafu': 'BGM提供: <@390069961340616704>さん'
+            };
+            
+            if(msgs[type]){
+              radioChatCnl.send(msgs[type]);
+            }
+            
+            //radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
+          });
+        }); 
+      }
     }
     
   } else if(subCmdName == 'jingle'){
