@@ -71,14 +71,21 @@ const init = async () => {
         const MainBotPrefix = ',';
         const args = msg.content.slice(MainBotPrefix.length).split(/ +/g);
         const command = args.shift().toLowerCase();
-        const MainBotCommands = ['balance'];
+        const MainBotCommands = ['tip'];
+        
+        if(command == 'tip'){
+          let regTip = /,tip\u0020(?:<@!?\d+>|X\w+)\u0020\d+(?:\.\d*)?(?=\u0020)?/;
+          let regInfo = regTip.exec(msg.content);
+          //console.log('Tip', regInfo != null);
+          return regInfo != null;
+        }
         
         return MainBotCommands.includes(command);
       },
       condCounterReset: (msg, current) => {
         return false; 
       }, 
-      numCheck: 15
+      numCheck: 5
     }
   };
   
@@ -90,7 +97,7 @@ const init = async () => {
           return;
         }
         
-        XPBot.limitBotSpam = true;
+        //XPBot.limitBotSpam = true;
         
         //console.log('execute!');
         //XPBot.getFrontendLogChannel().send('');
@@ -104,7 +111,7 @@ const init = async () => {
             '解除予定時刻: ' + endTime + 'ごろ';
         
         const sendSpam = require('./modules/sendSpam.js');
-        sendSpam(
+        /*sendSpam(
           XPBot,
           msg.guild,
           ['bot-spam', 'bot-spam2'],
@@ -116,7 +123,7 @@ const init = async () => {
             XPBot.log('BW', '制限終了', 'Log');
           },
           {waitBefore: 500, waitAfter: 8 * 60 * 1000}
-        );
+        );*/
         
       }
     }
@@ -124,12 +131,29 @@ const init = async () => {
   
   XPBot.botWatcher = [];
   XPBot.botWatcher['MainBot'] = require("./modules/botWatcher.js")(XPBot, wi, li);
+  
+  
+  XPBot.floodgates = {};
+  let cnlsForFloodgates = ['chat_1_xp', 'chat_2_jk', 'chat_3_honobono', 'chat_4_crypto', 'kids_room', 'xp_radio802', 'register_room', 'bot-spam', 'bot-spam2', 'fiatbot_room'];
+  
+  cnlsForFloodgates.forEach(cnl => {
+    let inf = {
+      'all': {
+        condCounterIncrement: (msg) => {
+          return true;
+        },
+        condCounterReset: (msg, current) => {
+          return false; 
+        }, 
+        numCheck: 5
+      }
+    };
+    XPBot.floodgates[cnl] = require("./modules/chatFloodgate.js")(XPBot, inf);
+  })
+  
 
   // ログイン
   XPBot.login(XPBot.config.token);
-  
-  // 起動完了
-  XPBot.ready = true;
 
   // トップレベルasync/await関数の終了
 };

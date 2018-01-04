@@ -36,7 +36,7 @@ class BotWatcher{
             message.author.id,
             {sentMsg: message, cmdName: cmdName}
           );
-          writeLog('Start Wacthing', message.author.username + '('+ message.author.id + ')');
+          writeLog('Start Wacthing', message.author.username + '('+ message.author.id + '): ' + cmdName + ' ' + message.channel.name + ' ' + message.id);
           //console.log('ユーザー追跡: ' + message.author.username + '('+ message.author.id + ')/ ' + message.createdAt);
           message.react(this._XPBot.emojisByName['stopwatch']);
           this._counter['general'] = 0;
@@ -81,7 +81,7 @@ class BotWatcher{
     /*console.log(duration);
     console.log(moment.duration(duration).format("D[日]H[時間]m[分]ss[秒]SS"));*/
     let logStr = '遅延 :stopwatch: ' + durationStr;
-    writeLog('End Wacthing', durationStr);
+    writeLog('End Wacthing ', durationStr + ' ' + message.channel.name + ' ' + message.id);
     this._XPBot.getFrontendLogChannel(message.guild).send(logStr);
     
     if(duration >= 15 * 60 * 1000){

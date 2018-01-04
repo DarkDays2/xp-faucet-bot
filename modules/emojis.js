@@ -27,6 +27,7 @@ module.exports = (XPBot) => {
     'regional_indicator_w': '\u1f1fc',
     'regional_indicator_x': '\u1f1fd',
     'regional_indicator_y': '\u1f1fe',
-    'regional_indicator_z': '\u1f1ff'
+    'regional_indicator_z': '\u1f1ff',
+    'doge': ':doge:391497526278225920'
   };
 };

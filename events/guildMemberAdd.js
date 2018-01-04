@@ -1,7 +1,7 @@
 // This event executes when a new member joins a server. Let's welcome them!
 
 module.exports = (XPBot, member) => {
-  // Load the guild's settings
+  /*// Load the guild's settings
   const settings = XPBot.settings.get(member.guild.id);
 
   // If welcome is off, don't proceed (don't welcome the user)
@@ -12,5 +12,5 @@ module.exports = (XPBot, member) => {
 
   // Send the welcome message to the welcome channel
   // There's a place for more configs here.
-  member.guild.channels.find("name", settings.welcomeChannel).send(welcomeMessage).catch(console.error);
+  member.guild.channels.find("name", settings.welcomeChannel).send(welcomeMessage).catch(console.error);*/
 };

@@ -27,7 +27,7 @@ module.exports = function(XPBot) {
           );
         } else{
           let err = 'ウォレットDBへ既に登録されています ' + info
-          writeLog('WAR', err);
+          //writeLog('WAR', err);
           reject(err);
         }
       });

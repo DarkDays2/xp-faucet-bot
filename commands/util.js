@@ -23,7 +23,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
       XPBot,
       message.guild,
       args, // args[1] - args[n]
-      ':unlock: メッセージ送信を制限を解除しました。',
+      ':unlock: メッセージ送信の制限を解除しました。',
       null,
       msg => {
         XPBot.log('Util', `#${msg.channel.name}でのメッセージ送信制限を解除しました`, 'Log');
@@ -61,36 +61,42 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         })
       );
     });
-
-    /*channel.fetchMessage(args[0])
-      .then(msg=> msg.delete())
-      .then(e => message.delete());
-    return;
-
-
-    Promise.all(
-      channelsToSpam.map((chnl) => {
-        chnl.startTyping();
-        return chnl.overwritePermissions(
-          everyoneRole,
-          {'SEND_MESSAGES': false}
-        ).then(async ()=>{
-          await XPBot.wait(spamOption.waitBefore || 0);
-          return chnl.send(message, sendOption);
-        }).then(async msg => {
-          await XPBot.wait(spamOption.waitAfter || 0);
-          return chnl.overwritePermissions(
-            everyoneRole,
-            {'SEND_MESSAGES': sendPermAfterSpam}
-          ).then(() => msg);
-        }).then(msg=>{
-          chnl.stopTyping();
-          if(funcAfterEach) funcAfterEach(msg);
-        })
-      })
-    ).then(()=>{
-      if(funcAfterAll) funcAfterAll();
-    });*/
+  } else if(subCmdName == 'vcin'){
+    if (message.member.voiceChannel) {
+      message.member.voiceChannel.join().catch(e => console.error(e));
+    }
+  } else if(subCmdName == 'vcout'){
+    if (message.member.voiceChannel) {
+      message.member.voiceChannel.leave();
+    }
+  } else if(subCmdName == 'radio_jg'){
+    if(args[0] == 'start' && args[1] != ''){
+      if (message.member.voiceChannel) {
+        message.member.voiceChannel.join()
+          .then(async connection => {
+          await XPBot.wait(1000);
+          XPBot.testDispatcher01 = connection.playFile("./assets/" + args[1] + ".mp3");
+        }).catch(console.log);
+      }
+    } else{
+      if(XPBot.testDispatcher01){
+        XPBot.testDispatcher01.end();
+        XPBot.testDispatcher01 = null;
+      }
+      message.member.voiceChannel.leave();
+    }
+  } else if(subCmdName == 'help'){
+    let output = 
+        'lockcnl   :: チャンネルの書込を制限します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' +
+        'unlockcnl :: チャンネルの書込制限を解除します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' + 
+        'stoptype  :: Botのチャンネルでのタイピングを終了します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' + 
+        'bal       :: ,balanceを送信します\r\n' + 
+        'del       :: メッセージを削除します。(メッセージIDを空白でつなげる)\r\n' + 
+        'vcin      :: 自分が参加しているボイスチャットに参加します。\r\n' + 
+        'vcout     :: 自分が参加しているボイスチャットから退出します。\r\n' + 
+        'radio\_jg  :: ジングル・BGMを流します。\r\n' + 
+        'help      :: このヘルプを表示します。\r\n';
+    message.channel.send(output, {code: "asciidoc", split: { char: "\u200b" }});
   }
 };
 
@@ -98,12 +104,13 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: "水道局長"
+  permLevel: "ラボメンバー"
 };
 
 exports.help = {
   name: "util",
   category: "サーバー運営",
-  description: "lockcnl / unlockcnl: 書き込み制限/解除(先頭に「#」無し/空白でつなげる)",
+  description: "便利なコマンドを実行します。「util help」で詳細。",
+  //description: "lockcnl / unlockcnl: 書き込み制限/解除(先頭に「#」無し/空白でつなげる)",
   usage: "util <サブコマンド名> <サブコマンド引数>"
 };

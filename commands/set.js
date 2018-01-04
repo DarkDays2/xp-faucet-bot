@@ -50,7 +50,7 @@ exports.run = async (XPBot, message, [action, key, ...value], level) => { // esl
     
     // Throw the 'are you sure?' text at them.
     const response = await XPBot.awaitReply(message, `${key} キーを本当に削除しますか？ 削除は__**取り消せません**__`);
-
+    console.log(response);
     // If they respond with y or yes, continue.
     if(["y", "yes"].includes(response)) {
 
@@ -85,5 +85,5 @@ exports.help = {
   name: "set",
   category: "システム",
   description: "このサーバー用の設定を表示・変更します。",
-  usage: "set <view/get/edit> <キー名> <値>"
+  usage: "set <add/edit/del/get> <キー名> <値>"
 };

@@ -65,7 +65,7 @@ module.exports = (XPBot) => {
 
   */
   XPBot.awaitReply = async (msg, question, limit = 60000) => {
-    const filter = m=>m.author.id = msg.author.id;
+    const filter = m=>m.author.id == msg.author.id;
     await msg.channel.send(question);
     try {
       const collected = await msg.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
@@ -101,7 +101,7 @@ module.exports = (XPBot) => {
   XPBot.loadCommand = (commandName) => {
     try {
       const props = require(`../commands/${commandName}`);
-      XPBot.log("log", `コマンド読込: ${props.help.name}. 👌`);
+      XPBot.log("log", `コマンド読込: ${props.help.name}`);
       if(props.init) {
         props.init(XPBot);
       }
