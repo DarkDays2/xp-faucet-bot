@@ -1,5 +1,8 @@
 exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-unused-vars
   XPBot.ready = false;
+  
+  await XPBot.wait(1000);
+  
   let msgDie = await message.reply("XPFaucetBotは再起動しています");
   
   /*XPBot.commands.forEach( async cmd => {
