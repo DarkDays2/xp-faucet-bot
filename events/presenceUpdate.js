@@ -17,7 +17,7 @@ module.exports = (XPBot, oldUser, newUser) => {
       var guild = XPBot.guilds.get(newUser.guild.id);
       var chat2 = guild.channels.find('name', 'chat_2_jk');
       if(chat2){
-        chat2.send('<@352230801741578240> 嬢 おはよ！わよ');
+        //chat2.send('【報告】 Botの負荷がヤバいときに\r\n<@352230801741578240> 嬢 おはよ！わよ\r\nって言うのは不謹慎なので言うのを止めました');
       }
       
     }
