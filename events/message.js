@@ -6,42 +6,50 @@ module.exports = (XPBot, message) => {
   if(!XPBot.ready) return;
   //if(message.author.bot) return;
   if(message.author.id === XPBot.user.id) return;
-
-  if(message.author.bot){
+  
+  let cnl = message.channel;
+  if(XPBot.floodgates[cnl.name]){
+    XPBot.floodgates[cnl.name].notify(message, 'all');
+  }
+  
+  if(message.author.bot){ // 自分以外のBotが送信した場合
     if(XPBot.config.mainBots.includes(message.author.id)){
-      let regBalanceMsg = /<@!?(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
-      let regInfo = regBalanceMsg.exec(message.content);
+      let balResPattern = /<@!?(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
+      let balResRegInfo = balResPattern.exec(message.content);
 
-      if(regInfo){
-        let userID = regInfo[1]; // Balanceコマンドを実行したUserのID
-        let userAddress = regInfo[2]; // Balanceコマンドで出力されたXPウォレットアドレス
+      if(balResRegInfo){
+        let userID = balResRegInfo[1]; // Balanceコマンドを実行したUserのID
+        let userAddress = balResRegInfo[2]; // Balanceコマンドで出力されたXPウォレットアドレス
         XPBot.db.walletDB.addAddress(userID, userAddress, 'Bot')
           .then(()=>{
           //message.channel.send('DBに登録しました');
         })
           .catch((ex)=>{
-          //message.channel.send('DBに登録失敗');
+          message.channel.send('DBに登録失敗');
         });
 
+        XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'balance');
         return;
-
-        //XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'balance');
       }
       
       if(message.embeds[0]){
         let msgAuthor = message.embeds[0].author.name;
         if(msgAuthor === 'Transaction Sent'){
           let userID = message.mentions.users.first().id;
-          
-          //console.log(message.content, userID, 'tip');
-
           XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'tip');
-
         }
       }
-
+      
+      let retryPattern = /<@!?(\d+)>,\stry\sagain\sin\s(\d+)\sseconds?/;
+      let retryRegInfo = retryPattern.exec(message.content);
+      
+      if(retryRegInfo){
+        let userID = retryRegInfo[1];
+        let waitTime = retryRegInfo[2];
+        message.channel.send(`<@${userID}> 連続してコマンドを使用することはできません。` + waitTime + '秒後にもう一度お試しください。');
+      }
     }
-  } else{
+  } else{ // 一般ユーザーが送信した場合
     /*if(message.content.includes("わよ！")){
       message.reply('__***もちろんですわ！***__');
       XPBot.log("log", `${XPBot.config.permLevels.find(l => l.level === level).name} の ${message.author.username}(${message.author.id}) がわよ！を実行しました`, "CMD");
@@ -50,18 +58,17 @@ module.exports = (XPBot, message) => {
 
     // PersistentCollectionからこのサーバー用の設定を取得
     // Guildが無い場合はデフォルト設定（DM用）
-    const settings = message.guild
-    ? XPBot.settings.get(message.guild.id)
-    : XPBot.config.defaultSettings;
+    const settings = XPBot.getGuildSettings(message.guild);
+    //const settings = message.guild ? XPBot.settings.get(message.guild.id) : XPBot.config.defaultSettings;
 
-    // コマンド・関数内で使いやすいように、message.settingsに設定オブジェクトを関連付ける
+    // コマンド・関数内で使いやすいように、messageに設定オブジェクトを関連付ける
     message.settings = settings;
 
     // ユーザーもしくはメンバーの権限を取得
     const level = XPBot.permlevel(message);
     const MainBotPrefix = ',';
 
-    if(message.content.indexOf(settings.prefix) === 0){
+    if(message.content.indexOf(settings.prefix) === 0){ // XPFaucet-Botのコマンド
       // コマンド名と引数を分離
       // 例: 「+say Is this the real life?」
       // command = say
@@ -99,13 +106,39 @@ module.exports = (XPBot, message) => {
       // コマンドが存在し且つユーザーが権限を持っているとき、コマンドを実行
       XPBot.log("log", `${XPBot.config.permLevels.find(l => l.level === level).name} の ${message.author.username}(${message.author.id}) が${cmd.help.name}コマンドを実行しました`, "CMD");
       cmd.run(XPBot, message, args, level);
-    } else if(message.content.indexOf(MainBotPrefix) === 0){
+    } else if(message.content.indexOf(MainBotPrefix) === 0){ //本家Botのコマンド
       const args = message.content.slice(MainBotPrefix.length).trim().split(/ +/g);
       const command = args.shift().toLowerCase();
       
       //console.log(message.content, command);
-
-      XPBot.botWatcher['MainBot'].notifyCommand(message, command);
+      
+      if(settings.mainBotDown === 'true'){
+        console.log(message.id, message.author.username, message.channel.name);
+        if(message.channel.name == 'chat_1_xp'){
+          const sendSpam = require('../modules/sendSpam.js');
+          sendSpam(
+            XPBot,
+            message.guild,
+            ['chat_1_xp'],
+            `<@${message.author.id}>, Xp-Botが停止しているため、コマンドは実行できません。`,
+            null,
+            null,
+            null,
+            {waitBefore: 0, waitAfter: 3000}
+          );
+        }else{
+          message.reply('Xp-Botが停止しているため、コマンドは実行できません。');
+        }
+      }else{
+        XPBot.botWatcher['MainBot'].notifyCommand(message, command);
+      }
+    } else if(message.content.indexOf('?') === 0 || message.content.indexOf('？') === 0){
+      const args = message.content.slice(MainBotPrefix.length).trim().split(/ +/g);
+      const command = args.shift().toLowerCase();
+      
+      if(command == 'いくら'){
+        message.reply('「?いくら」コマンドは廃止されました。');
+      }
     }
   }
 };
