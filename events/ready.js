@@ -9,4 +9,7 @@ module.exports = async XPBot => {
 
   // We check for any guilds added while the bot was offline, if any were, they get a default configuration.
   XPBot.guilds.filter(g => !XPBot.settings.has(g.id)).forEach(g => XPBot.settings.set(g.id, XPBot.config.defaultSettings));
+  
+  // 起動完了
+  XPBot.ready = true;
 };
