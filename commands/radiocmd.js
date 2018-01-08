@@ -71,7 +71,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
       //let param = args.shift();
       let name = filenames[type];
       
-      console.log(type);
+      //console.log(type);
       
       if(name){
         var vol = vols[type];
@@ -117,17 +117,54 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
       });*/
     });
   } else if(subCmdName == 'help'){
-    let output = 
-        'lockcnl   :: チャンネルの書込を制限します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' +
-        'unlockcnl :: チャンネルの書込制限を解除します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' + 
-        'stoptype  :: Botのチャンネルでのタイピングを終了します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' + 
-        'bal       :: ,balanceを送信します\r\n' + 
-        'del       :: メッセージを削除します。(（)メッセージIDを空白でつなげる)\r\n' + 
-        'vcin      :: 自分が参加しているボイスチャットに参加します。\r\n' + 
-        'vcout     :: 自分が参加しているボイスチャットから退出します。\r\n' + 
-        'radio\_jg  :: ジングル・BGMを流します。\r\n' + 
-        'help      :: このヘルプを表示します。\r\n';
-    //message.channel.send(output, {code: "asciidoc", split: { char: "\u200b" }});
+    let helpCmd = args.shift();
+    
+    var output = '';
+    
+    switch(helpCmd){
+      case 'bgm':
+        output +=
+          '= radiocmdコマンド bgmサブコマンド ヘルプ =\r\n' +
+          '音楽を再生します(YouTube/ローカルファイル再生)\r\n\r\n' +
+          '== !!radiocmd bgm yt <動画ID> <音量> ==\r\n' +
+          'YouTubeの動画を再生します(著作権に注意)\r\n' + 
+          'https://www.youtube.com/watch?v=<動画ID>\r\n\r\n' + 
+          '== !!radiocmd bgm <BGM名> ==\r\n' + 
+          'XPFaucet-Botのローカルに保存されているファイルを再生します\r\n' + 
+          '  morning01 - No Copyright Sound (YouTubeより)\r\n' + 
+          '  techno01  - No Copyright Sound (YouTubeより)\r\n' + 
+          '  atale     - Japaritale\r\n' + 
+          '  akarui1   - ひろし氏制作BGM\r\n' + 
+          '  akarui2   - ひろし氏制作BGM\r\n' + 
+          '  wafu      - ひろし氏制作BGM\r\n' +
+          '== !!radiocmd bgm stop ==\r\n' +
+          '現在流れているBGM・ジングルを停止させます\r\n\r\n' +
+          '== 音量について ==\r\n' + 
+          'YouTubeからBGMを再生する場合のみ、音量を指定可能\r\n' + 
+          '音量は、0.1倍1が10%、0.1が1%'
+        
+        break;
+        /*let filenames = {
+        'morning01': 'BGM-Morning01.mp3',
+        'techno01': 'BGM-Techno01.mp3',
+        'atale': 'A Tale-001b.mp3',
+        'akarui1': 'xp_akarui_hourly_loop.mp3',
+        'akarui2': 'xp_akarui_2_halfhourly_loop.mp3',
+        'wafu': 'xp_wafu_halfhourly_loop.mp3'
+      };*/
+      default:
+        output += 
+          '= radiocmdコマンド ヘルプ =\r\n\r\n' +
+          '[!!radiocmd help <サブコマンド名> で詳細表示]\r\n\r\n' + 
+          'bgm  :: 音楽を再生します(YouTube/ローカルファイル再生)\r\n' +
+          'help :: このヘルプを表示します。\r\n';
+        break;
+    }
+    /*let output = 
+        'bgm yt <YouTube動画ID> <音量>   :: YouTubeの動画を再生します(（)著作権に注意)\r\n' +
+        'bgm <BGM名> <音量> :: 水道局ローカルに保存されているBGMを再生します(akarui1, akarui2, wafu, morning01, techno01)\r\n' + 
+        'help      :: このヘルプを表示します。\r\n';*/
+    message.channel.send(output, {code: "asciidoc", split: { char: "\u200b" }});
   }
 };
 
@@ -135,7 +172,7 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: "モデレーター"
+  permLevel: "ラジオ放送者"
 };
 
 exports.help = {
