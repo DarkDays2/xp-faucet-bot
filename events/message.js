@@ -6,14 +6,14 @@ module.exports = (XPBot, message) => {
   if(!XPBot.ready) return;
   //if(message.author.bot) return;
   if(message.author.id === XPBot.user.id) return;
-  
+
   let cnl = message.channel;
   if(XPBot.floodgates[cnl.name]){
     XPBot.floodgates[cnl.name].notify(message, 'all');
   }
-  
+
   if(message.author.bot){ // 自分以外のBotが送信した場合
-    if(XPBot.config.mainBots.includes(message.author.id)){
+    if(message.author.id == XPBot.config.WWWalletBot){
       let balResPattern = /<@!?(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
       let balResRegInfo = balResPattern.exec(message.content);
 
@@ -31,7 +31,7 @@ module.exports = (XPBot, message) => {
         XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'balance');
         return;
       }
-      
+
       if(message.embeds[0]){
         let msgAuthor = message.embeds[0].author.name;
         if(msgAuthor === 'Transaction Sent'){
@@ -39,10 +39,10 @@ module.exports = (XPBot, message) => {
           XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'tip');
         }
       }
-      
+
       let retryPattern = /<@!?(\d+)>,\stry\sagain\sin\s(\d+)\sseconds?/;
       let retryRegInfo = retryPattern.exec(message.content);
-      
+
       if(retryRegInfo){
         let userID = retryRegInfo[1];
         let waitTime = retryRegInfo[2];
@@ -109,36 +109,25 @@ module.exports = (XPBot, message) => {
     } else if(message.content.indexOf(MainBotPrefix) === 0){ //本家Botのコマンド
       const args = message.content.slice(MainBotPrefix.length).trim().split(/ +/g);
       const command = args.shift().toLowerCase();
-      
+
       //console.log(message.content, command);
-      
-      if(settings.mainBotDown === 'true'){
+
+      if(XPBot.MainBotReady === false){
         console.log(message.id, message.author.username, message.channel.name);
-        if(message.channel.name == 'chat_1_xp'){
-          const sendSpam = require('../modules/sendSpam.js');
-          sendSpam(
-            XPBot,
-            message.guild,
-            ['chat_1_xp'],
-            `<@${message.author.id}>, Xp-Botが停止しているため、コマンドは実行できません。`,
-            null,
-            null,
-            null,
-            {waitBefore: 0, waitAfter: 3000}
-          );
-        }else{
-          message.reply('Xp-Botが停止しているため、コマンドは実行できません。');
-        }
+        message.reply('Xp-Botが停止しているため、コマンドは実行できません。')
+        .then(msg => {
+          msg.delete(5000);
+        });
       }else{
         XPBot.botWatcher['MainBot'].notifyCommand(message, command);
       }
     } else if(message.content.indexOf('?') === 0 || message.content.indexOf('？') === 0){
       const args = message.content.slice(MainBotPrefix.length).trim().split(/ +/g);
       const command = args.shift().toLowerCase();
-      
-      if(command == 'いくら'){
+
+      /*if(command == 'いくら'){
         message.reply('「?いくら」コマンドは廃止されました。');
-      }
+      }*/
     }
   }
 };
