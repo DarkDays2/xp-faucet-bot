@@ -45,7 +45,7 @@ exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "チャットルーム・マネージャー"
+  permLevel: "サポートチーム"
 };
 
 exports.help = {

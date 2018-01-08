@@ -2,19 +2,21 @@
 // 注: Botは全てのイベントに関連付けられているため、関数実行時全てのイベントに
 // XPBot, other, args が渡されます。
 
-module.exports = (XPBot, oldUser, newUser) => {
+module.exports = (XPBot, oldMember, newMember) => {
   if(!XPBot.ready) return;
   //if(message.author.bot) return;
-  if(oldUser.id === XPBot.user.id) return;
+  if(oldMember.id === XPBot.user.id) return;
 
-  if(oldUser.bot){
-    if(XPBot.config.mainBots.includes(oldUser.id)){
-
+  if(oldMember.bot){
+    if(oldMember.id == XPBot.config.WWWalletBot){
+      //let wwbot = await XPBot.guilds.find('name', 'XP 日本').fetchMember(XPBot.config.WWWalletBot);
+      XPBot.MainBotReady = newMember.presence.status !== 'offline';
+      console.log('WWWalletBot\'s ready turned into:', XPBot.MainBotReady);
     }
   } else{
-    //console.log(oldUser.id);
-    if(newUser.id == '352230801741578240' && newUser.presence.status == 'online') {//Kazmaro
-      var guild = XPBot.guilds.get(newUser.guild.id);
+    //console.log(oldMember.id);
+    if(newMember.id == '352230801741578240' && newMember.presence.status == 'online') {//Kazmaro
+      var guild = XPBot.guilds.get(newMember.guild.id);
       var chat2 = guild.channels.find('name', 'chat_2_jk');
       if(chat2){
         //chat2.send('【報告】 Botの負荷がヤバいときに\r\n<@352230801741578240> 嬢 おはよ！わよ\r\nって言うのは不謹慎なので言うのを止めました');

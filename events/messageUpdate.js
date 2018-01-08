@@ -8,7 +8,7 @@ module.exports = (XPBot, oldMsg, newMsg) => {
   if(newMsg.author.id === XPBot.user.id) return;
 
   if(newMsg.author.bot){
-    if(XPBot.config.mainBots.includes(newMsg.author.id)){
+    if(newMsg.author.id == XPBot.config.WWWalletBot){
       let regBalanceMsg = /<@!?(\d+)>,\sBalance:\s\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\s-\s(X\w*)/;
       let regInfo = regBalanceMsg.exec(newMsg.content);
 

@@ -10,6 +10,10 @@ module.exports = async XPBot => {
   // We check for any guilds added while the bot was offline, if any were, they get a default configuration.
   XPBot.guilds.filter(g => !XPBot.settings.has(g.id)).forEach(g => XPBot.settings.set(g.id, XPBot.config.defaultSettings));
   
+  let wwbot = await XPBot.guilds.find('name', 'XP 日本').fetchMember(XPBot.config.WWWalletBot);
+  XPBot.MainBotReady = wwbot.presence.status !== 'offline';
+  console.log('WWWalletBot\'s ready is:', XPBot.MainBotReady);
+  
   // 起動完了
   XPBot.ready = true;
 };

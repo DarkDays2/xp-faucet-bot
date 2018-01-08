@@ -35,7 +35,7 @@ exports.run = (XPBot, message, args, level) => {
     if(XPBot.commands.has(command)) {
       command = XPBot.commands.get(command);
       if(level < XPBot.levelCache[command.conf.permLevel]) return;
-      message.channel.send(`= ${command.help.name} = \n${command.help.description}\n使用法:: ${command.help.usage}\nエイリアス:: ${command.conf.aliases.join(", ")}\n= ${command.help.name} =`, {code:"asciidoc"});
+      message.channel.send(`= ${command.help.name} = \n${command.help.description}\n使用法　　:: ${command.help.usage}\nエイリアス:: ${command.conf.aliases.join(", ")}\n= ${command.help.name} =`, {code:"asciidoc"});
     }
   }
 };

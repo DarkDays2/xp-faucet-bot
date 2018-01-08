@@ -11,9 +11,9 @@ const config = {
   // Botのトークン。 https://discordapp.com/developers/applications/me で調べる。
   "token": "<Your Bot's Token>",
   
-  // ユーザーのXPを操作するBotのユーザーID配列（型 :string）。
+  // ユーザーのXPを操作するBotのユーザーID（型 :string）。
   // 12月19日時点で稼働（修理）中のXp-Botは、352815000257167362
-  "mainBots": ["352815000257167362"],
+  "WWWalletBot": "352815000257167362",
 
   // サーバーごとに作られる設定のデフォルト設定。新しいGuild（サーバー）の設定はここで指定したものになる。
   // コマンドによる設定変更が出来なくなるため、空白は指定しないこと。
@@ -26,7 +26,6 @@ const config = {
     "welcomeChannel": "welcome",
     "welcomeMessage": "Say hello to {{user}}, everyone! We all need a warm welcome sometimes :D",
     "welcomeEnabled": "false",
-    "mainBots": []
   },
 
   // 権限レベルの定義
