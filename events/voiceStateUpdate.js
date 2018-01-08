@@ -15,7 +15,8 @@ module.exports = (XPBot, oldMember, newMember) => {
     var radioChatCnls = {
       'XP_radio802': 'xp_radio802',
       'General': 'general_chat',
-      'general2': 'general'
+      'general2': 'general',
+      'developer_only': ''
     };
 
     if(!oldMember.voiceChannel && newMember.voiceChannel){    
@@ -23,12 +24,20 @@ module.exports = (XPBot, oldMember, newMember) => {
       let radioChatCnl = newMember.guild.channels.find('name', radioChatCnls[radioCnl.name]);
 
       if(!radioChatCnl) return;
+      
+      if(newMember.presence.status == 'offline' || newMember.presence.status == 'dnd') return;
       //console.log(newMember.displayName);
       radioChatCnl.send(`<@${newMember.id}>さん、いらっしゃ～い`)
         .then(async msg => {
-        await XPBot.wait(60000);
+        await XPBot.wait(40000);
         msg.delete();
       });
+      
+      return;
     }
+    
+    /*if(oldMember.voiceChannel && newMember.voiceChannel ){
+      
+    }*/
   }
 };
