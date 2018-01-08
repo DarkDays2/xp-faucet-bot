@@ -53,11 +53,11 @@ class chatFloodgate{
             this._speed['all'] = currentSpeed;
             
             /*if(message.channel.name == 'chat_1_xp'){
-              if(currentSpeed >= 70){
+              if(currentSpeed >= 150){
                 this._close(message);
               }
             } else{*/
-              if(currentSpeed >= 100){
+              if(currentSpeed >= 150){
                 this._close(message);
               }
             //}
@@ -86,7 +86,7 @@ class chatFloodgate{
       {'SEND_MESSAGES': false},
       '勢い強杉'
     ).then(async () => {
-      await this._XPBot.wait(1000);
+      await this._XPBot.wait(4000);
       return cnl.overwritePermissions(
         everyoneRole,
         {'SEND_MESSAGES': true},
