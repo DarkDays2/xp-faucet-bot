@@ -13,6 +13,7 @@ const XPBot = new Discord.Client();
 
 // 起動完了判定の初期化
 XPBot.ready = false;
+XPBot.MainBotReady = null;
 
 // 設定ファイル読み込み
 XPBot.config = require("./config.js");
@@ -102,9 +103,9 @@ const init = async () => {
         //console.log('execute!');
         //XPBot.getFrontendLogChannel().send('');
         let settings = XPBot.getGuildSettings(msg.guild);
-        let botOwner = XPBot.config.ownerID;
+        //let botOwner = XPBot.config.ownerID;
         let mod = msg.guild.roles.find('name', settings.modRole);
-        XPBot.getFrontendLogChannel(msg.guild).send(`<@&${mod.id}> <@${botOwner}> 遅延が15分を超えました。`);
+        XPBot.getFrontendLogChannel(msg.guild).send(`<@&${mod.id}> 遅延が15分を超えました。`);
         
         let endTime = moment().second(0).add(8, 'm').format('HH[時]mm[分]');
         let limitMsg = ':lock: 本家Botの遅延時間が大きくなったため、\r\nこのチャンネルへのメッセージ送信を制限しています。\r\n\r\n' + 
