@@ -8,7 +8,8 @@ exports.run = (XPBot, message, args, level) => {
   // 引数無しの場合、全てのコマンドを一覧表示する
   if(!args[0]) {
     // サーバーごとの設定読み込み
-    const settings = message.guild ? XPBot.settings.get(message.guild.id) : XPBot.config.defaultSettings;
+    const settings = XPBot.getGuildSettings(message.guild);
+    //const settings = message.guild ? XPBot.settings.get(message.guild.id) : XPBot.config.defaultSettings;
 
     // <Collection>.filter()関数で権限レベルでコマンドをフィルター
     const myCommands = message.guild ? XPBot.commands.filter(cmd => XPBot.levelCache[cmd.conf.permLevel] <= level) : XPBot.commands.filter(cmd => XPBot.levelCache[cmd.conf.permLevel] <= level &&  cmd.conf.guildOnly !== true);
@@ -49,7 +50,7 @@ exports.conf = {
 
 exports.help = {
   name: "help",
-  category: "システム",
+  category: "全般",
   description: "権限レベルに合わせて使用可能なコマンドを全て表示します",
   usage: "help [コマンド名]"
 };

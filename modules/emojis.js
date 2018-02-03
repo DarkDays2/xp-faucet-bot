@@ -31,7 +31,7 @@ module.exports = (XPBot) => {
     'regional_indicator_z': String.fromCodePoint(0x1f1ff),
     'a': String.fromCodePoint(0x1f170),
     'b': String.fromCodePoint(0x1f171),
-    'o': String.fromCodePoint(0x1f17e),
+    'o2': String.fromCodePoint(0x1f17e),
     'doge': ':doge:391497526278225920'
   };
 };

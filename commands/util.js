@@ -47,6 +47,8 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     ).then(()=>{
       XPBot.log('Util', `合計${args.length}チャンネルでのタイピングを終了しました`, 'Log');
     });
+  } else if(subCmdName == 'reg'){
+    //dockeXPBot.getFrontendLogChannel(message.guild).send(',register');
   } else if(subCmdName == 'bal'){
     XPBot.getFrontendLogChannel(message.guild).send(',balance');
   } else if(subCmdName == 'del'){
@@ -57,7 +59,12 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
       return Promise.all(
         args.map(msgId => {
           channel.fetchMessage(msgId)
-            .then(msg => msg.delete());
+            .then(msg => {
+            msg.delete();
+          }).catch(e=>{
+            if(e.code === 10008) XPBot.log('Util', 'メッセージが見つかりません: ' + e.path, 'ERR');
+            else console.error(e);
+          });;
         })
       );
     });

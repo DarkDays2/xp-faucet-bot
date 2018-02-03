@@ -4,16 +4,19 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
   
   let channels = args.shift().split(';'); //args[0]
   let wait = parseInt(args.shift(), 10); //args[1]
+  
+  if(args.length == 0) return;
+  
+  args[0] = args[0].replace('everyone', '@everyone');
+  
   let spamMsg = args.join(' ');
   
-  const settings = message.guild
-  ? XPBot.settings.get(message.guild.id)
-  : XPBot.config.defaultSettings;
   
   
+  const settings = XPBot.getGuildSettings(message.guild);  
   
   if(spamMsg.indexOf(',') === 0){
-    message.reply(':cop: 水道局に何をする―');
+    message.reply('`spam`コマンドで水道局にXp-Botコマンドを打たせることはできません :cop:');
     return;
   }
   
@@ -21,6 +24,11 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
     message.reply(':no_entry_sign: 構文エラー');
     return;
   }
+  
+  let wBefore;
+  if(wait >= 3000) wBefore = 2000;
+  else if(wait > 0) wBefore = 800;
+  else wBefore = 0;
   
   sendSpam(
     XPBot,
@@ -32,7 +40,7 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
     () => { //funcAfterAll
       XPBot.log('SPAM', '送信終了', 'Log');
     },
-    {waitBefore: 500, waitAfter: wait}
+    {waitBefore: wBefore, waitAfter: wait}
   );
   
   /*console.log('channels: ', channels);

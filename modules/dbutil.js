@@ -18,7 +18,7 @@ module.exports.initDB = function(XPBot, filename) {
   db.closeFromDB = () => {
     return new Promise((resolve, reject) => {
       try{
-        XPBot.db.walletDB.close();
+        db.close();
         writeLog('LOG', filename + 'から切断しました', );
         resolve();
       } catch(ex){

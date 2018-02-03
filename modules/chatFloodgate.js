@@ -52,9 +52,9 @@ class chatFloodgate{
             
             this._speed['all'] = currentSpeed;
             
-            /*if(message.channel.name == 'chat_1_xp'){
-              if(currentSpeed >= 150){
-                this._close(message);
+            /*if(['register_room', 'bot-spam', 'bot-spam2', 'fiatbot_room'].includes(message.channel.name)){
+              if(currentSpeed >= 80){
+                this._closeLong(message);
               }
             } else{*/
               if(currentSpeed >= 150){
@@ -81,7 +81,7 @@ class chatFloodgate{
     let infStr = cnl.name + ' (' + this.speed['all'].toFixed(3) + ' mes/min)';
     
     this._XPBot.log('CFG', 'チャット制限開始: ' + infStr , 'Close');
-    cnl.overwritePermissions(
+    /*cnl.overwritePermissions(
       everyoneRole,
       {'SEND_MESSAGES': false},
       '勢い強杉'
@@ -94,17 +94,43 @@ class chatFloodgate{
       );
     }).then(() => {
       this._XPBot.log('CFG', 'チャット制限終了: ' + cnl.name, 'Open');
-    });
+    });*/
     
+    //console.log(message.guild.name);
+    let logCnl = this._XPBot.getFrontendLogChannel(message.guild);
+    if(logCnl){
+      //logCnl.send('チャット :no_entry: ' + infStr);
+      logCnl.send('CFGInfo: ' + infStr);
+    }
+  }
+  
+  _closeLong(message){
+    let everyoneRole = message.guild.roles.find('name', '@everyone');
+    let cnl = message.channel;
+
+    let infStr = cnl.name + ' (' + this.speed['all'].toFixed(3) + ' mes/min)';
+
+    this._XPBot.log('CFG', 'チャット制限開始: ' + infStr , 'Close Long');
+    cnl.overwritePermissions(
+      everyoneRole,
+      {'SEND_MESSAGES': false},
+      '勢い強杉'
+    ).then(async () => {
+      await this._XPBot.wait(15000);
+      return cnl.overwritePermissions(
+        everyoneRole,
+        {'SEND_MESSAGES': true},
+        '勢い強杉'
+      );
+    }).then(() => {
+      this._XPBot.log('CFG', 'チャット制限終了: ' + cnl.name, 'Open');
+    });
+
     //console.log(message.guild.name);
     let logCnl = this._XPBot.getFrontendLogChannel(message.guild);
     if(logCnl){
       logCnl.send('チャット制限 :no_entry: ' + infStr);
     }
-  }
-  
-  async _closeLong(message){
-    
   }
 }
 

@@ -1,6 +1,7 @@
 //var sqlite3 = require('sqlite3');
 var scd = require('node-schedule');
 const moment = require("moment");
+const sendSpam = require('../modules/sendSpam.js');
 require("moment-duration-format");
 
 module.exports = function(XPBot) {
@@ -21,13 +22,14 @@ module.exports = function(XPBot) {
     if(origFuncInfo.cmdName == 'radioset'){
 
     } else if(origFuncInfo.cmdName == 'radio_ts' || origFuncInfo.cmdName == 'radio_bgm'){
-      // guild: guildname
+      // guild: guildID
       // channel: channelname
       // date: date
       // (ts)code: code of timesignal
       // (bgm)bgm: name of bgm
       let p = origFuncInfo.params;
-      let radioGuild = _XPBot.guilds.find('name', p.guild);
+      //let radioGuild = _XPBot.guilds.find('name', p.guild);
+      let radioGuild = _XPBot.guilds.get(p.guild);
       let radioCnl = radioGuild.channels.find(val => {
         return val.type === 'voice' && val.name === p.channel;
       });
@@ -75,6 +77,44 @@ module.exports = function(XPBot) {
           });
         }).catch(console.log);
       }
+    } else if(origFuncInfo.cmdName == 'send_spam'){
+      // guild: guildID
+      // channels: channels
+      // msg: message
+      // sendOpt: sendOption
+      // wBef: waitBefore
+      // wAft: waitAfter
+      
+      let p = origFuncInfo.params;
+      let g = _XPBot.guilds.get(p.guild);
+      //let g = _XPBot.guilds.find('name', p.guild);
+      let cnls = p.channels.split(';');
+      
+      let wBefore = parseInt(p.wBef, 10);
+      let wAfter = parseFloat(p.wAft, 10);
+      
+      if(isNaN(wBefore)){
+        writeLog('ERR', 'p.wBef の値が不正です');
+        return;
+      }
+      
+      if(isNaN(wAfter)){
+        writeLog('ERR', 'p.wAft の値が不正です');
+        return;
+      }
+      
+      sendSpam(
+        _XPBot,
+        g,
+        cnls,
+        p.msg,
+        p.sendOpt,
+        null,
+        () => {
+          _XPBot.log('SPAM', 'scheduler 送信終了', 'Log');
+        },
+        {waitBefore: wBefore, waitAfter: wAfter}
+      );
     }
     writeLog('Log', 'タスク(' + origFuncInfo.taskId + ')の実行を終了しました');
     //console.log(origFuncInfo.afterStat);
@@ -288,8 +328,14 @@ module.exports = function(XPBot) {
         writeLog('ERR', '遅延許可タスク(' + id + ')は期限切れです');
 
         if(task.resend_by === 0 || resendMon.isAfter(nowMon)){
-          writeLog('Resent', '遅延許可タスク(' + id + ')を遅延実行しました');
-          funcWrap({XPBot: XPBot, taskId: id, cmdName: task.cmd, params: task.params, afterStat: 'resent'});
+          
+          /*XPBot.on(eventName, event.bind(null, XPBot));*/
+          XPBot.on('ready', (async _XPBot => {
+            await _XPBot.wait(1000);
+            writeLog('Resent', '遅延許可タスク(' + id + ')を遅延実行しました');
+            funcWrap({XPBot: _XPBot, taskId: id, cmdName: task.cmd, params: task.params, afterStat: 'resent'});
+          }).bind(null, XPBot));
+          
         }else{
           XPBot.db.taskScdDB.setStatusById(id, 'canceled', 'resend');
         }
