@@ -81,7 +81,7 @@ class BotWatcher{
     /*console.log(duration);
     console.log(moment.duration(duration).format("D[日]H[時間]m[分]ss[秒]SS"));*/
     let logStr = '遅延 :stopwatch: ' + durationStr;
-    writeLog('End Wacthing ', durationStr + ' ' + message.channel.name + ' ' + message.id);
+    writeLog('End Wacthing', durationStr + ' ' + message.channel.name + ' ' + message.id);
     this._XPBot.getFrontendLogChannel(message.guild).send(logStr);
     
     if(duration >= 15 * 60 * 1000){
@@ -89,6 +89,7 @@ class BotWatcher{
       this._counter['general'] = 0;
       this._counterUntilLimit['general'] = 0;
     }
+    this._currentChecking['general'].delete(userID);
     //console.log('check end');
   }
   

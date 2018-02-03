@@ -12,7 +12,7 @@ exports.conf = {
 
 exports.help = {
   name: "ping",
-  category: "その他",
+  category: "全般",
   description: "ピンポンのようでピンポンでないピンポン。遅延を取得します。",
   usage: "ping"
 };

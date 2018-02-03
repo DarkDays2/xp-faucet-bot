@@ -22,7 +22,7 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
               stampName = 'b';
               break;
             case 'o':
-              stampName = 'o';
+              stampName = 'o2';
               break;
             case 'i':
               stampName = 'information_source';
@@ -53,7 +53,7 @@ exports.conf = {
 
 exports.help = {
   name: "react",
-  category: "その他",
+  category: "チャット",
   description: "絵文字テロ",
   usage: "react <メッセージID> <アルファベット文字列>"
 };

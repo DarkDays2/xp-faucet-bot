@@ -1,7 +1,7 @@
 // presenceUpdateイベントはユーザーのステータス変更時に発火します
 // 注: Botは全てのイベントに関連付けられているため、関数実行時全てのイベントに
 // XPBot, other, args が渡されます。
-
+const lotSys = require('../modules/lotterySystem.js');
 module.exports = (XPBot, oldMember, newMember) => {
   if(!XPBot.ready) return;
   //if(message.author.bot) return;
@@ -12,32 +12,103 @@ module.exports = (XPBot, oldMember, newMember) => {
     /*let oldC = oldMember.voiceChannel ? oldMember.voiceChannel.name : 'null';
     let newC = newMember.voiceChannel ? newMember.voiceChannel.name : 'null';
     console.log(newMember.displayName, oldC, newC);*/
-    var radioChatCnls = {
+    /*var radioChatCnls = {
       'XP_radio802': 'xp_radio802',
-      'General': 'general_chat',
+      'freetalk': 'vc_freetalk',
       'general2': 'general',
-      'developer_only': ''
-    };
+      'developer_only': '',
+      'ofuton': ''
+    };*/
 
-    if(!oldMember.voiceChannel && newMember.voiceChannel){    
-      let radioCnl = newMember.voiceChannel;
-      let radioChatCnl = newMember.guild.channels.find('name', radioChatCnls[radioCnl.name]);
+    let welcomeVC = m => {
+      let radioCnl = m.voiceChannel;
+      let radioChatCnl = m.guild.channels.find('name', XPBot.config.radioChatCnls[radioCnl.name]);
 
       if(!radioChatCnl) return;
-      
-      if(newMember.presence.status == 'offline' || newMember.presence.status == 'dnd') return;
-      //console.log(newMember.displayName);
-      radioChatCnl.send(`<@${newMember.id}>さん、いらっしゃ～い`)
+
+      let numRadioMember = radioCnl.members.size;
+      let delMs;
+
+      if(radioChatCnl >= 200) return;
+      else if(radioChatCnl >= 150) delMs = 15000;
+      else if(radioChatCnl >= 100) delMs = 20000;
+      else if(radioChatCnl >= 80) delMs = 30000;
+      else delMs = 40000;
+
+      let joinMsgs = [
+        `<@${m.id}>さん、いらっしゃ～い`,
+        `、、、ん！？　そうか！そこで <@${m.id}> か！！`,
+        `「まだ <@${m.id}> してないの？」`
+      ];
+
+      let joinMsg = lotSys(XPBot, joinMsgs, [0.6, 0.3, 0.1]);
+
+      radioChatCnl.send(joinMsg)
         .then(async msg => {
-        await XPBot.wait(40000);
-        msg.delete();
+        //await XPBot.wait(40000);
+        msg.delete(delMs).catch(e=>{
+          if(e.code === 10008) XPBot.log('Util', 'メッセージは既に削除されています: ' + e.path, 'ERR');
+          else console.error(e);
+        });
       });
-      
+    };
+
+    if(
+      (!oldMember.voiceChannel && newMember.voiceChannel)
+      || (oldMember.voiceChannel && newMember.voiceChannel
+          && oldMember.voiceChannel.id !== newMember.voiceChannel.id)
+    ){
+      if(newMember.selfDeaf || newMember.serverDeaf) return;
+      if(newMember.presence.status == 'offline' || newMember.presence.status == 'dnd') return;
+
+      welcomeVC(newMember);
       return;
     }
-    
-    /*if(oldMember.voiceChannel && newMember.voiceChannel ){
-      
-    }*/
+
+    (async () => {
+      if(newMember.voiceChannel){
+        let logc = XPBot.getFrontendLogChannel(newMember.guild);
+        let memName = await XPBot.safenUsername(XPBot, newMember.displayName);
+        let msg = null;
+        let embedColor = null;
+
+        if(!oldMember.serverMute && newMember.serverMute){
+          msg = ':mute: サーバーミュート設定: ' + memName;
+          embedColor = 'RED';
+          console.log('serverMute:', newMember.displayName);
+        }
+
+        if(oldMember.serverMute && !newMember.serverMute){
+          msg = ':speaker: サーバーミュート解除: ' + memName;
+          console.log('serverUnMute:', newMember.displayName);
+          embedColor = 'GREEN';
+        }
+
+        if(!oldMember.serverDeaf && newMember.serverDeaf){
+          msg = ':mute: サーバー側スピーカーミュート設定: ' + memName;
+          console.log('ServerDeaf:', newMember.displayName);
+          embedColor = 'DARK_RED';
+        }
+
+        if(oldMember.serverDeaf && !newMember.serverDeaf){
+          msg = ':speaker: サーバー側スピーカーミュート解除: ' + memName;
+          console.log('ServerUnDeaf:', newMember.displayName);
+          embedColor = 'DARK_GREEN';
+        }
+        if(msg !== null){
+          const Discord = require("discord.js");
+
+          logc.send(msg, 
+                    new Discord.RichEmbed()
+                    .setTitle('VC設定変更')
+                    .addField('ユーザー名', memName, true)
+                    .addField('ユーザーID', newMember.id, true)
+                    //.addField('チャンネル名', newMember.voiceChannel.name, true)
+                    .setTimestamp()
+                    .setColor(embedColor)
+                   );
+        }
+      }
+    })();
   }
 };

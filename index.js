@@ -9,7 +9,7 @@ const EnmapLevel = require("enmap-level");
 const moment = require("moment");
 require("moment-duration-format");
 
-const XPBot = new Discord.Client();
+const XPBot = new Discord.Client({messageCacheLifetime: 21600, messageSweepInterval: 3600});
 
 // 起動完了判定の初期化
 XPBot.ready = false;
@@ -103,9 +103,10 @@ const init = async () => {
         //console.log('execute!');
         //XPBot.getFrontendLogChannel().send('');
         let settings = XPBot.getGuildSettings(msg.guild);
-        //let botOwner = XPBot.config.ownerID;
+        let botOwner = XPBot.config.ownerID;
         let mod = msg.guild.roles.find('name', settings.modRole);
-        XPBot.getFrontendLogChannel(msg.guild).send(`<@&${mod.id}> 遅延が15分を超えました。`);
+        //XPBot.getFrontendLogChannel(msg.guild).send(`<@&${mod.id}> 遅延が15分を超えました。`);
+        XPBot.getFrontendLogChannel(msg.guild).send(`<@${botOwner}> 遅延が15分を超えました。`);
         
         let endTime = moment().second(0).add(8, 'm').format('HH[時]mm[分]');
         let limitMsg = ':lock: 本家Botの遅延時間が大きくなったため、\r\nこのチャンネルへのメッセージ送信を制限しています。\r\n\r\n' + 
@@ -131,11 +132,11 @@ const init = async () => {
   };
   
   XPBot.botWatcher = [];
-  XPBot.botWatcher['MainBot'] = require("./modules/botWatcher.js")(XPBot, wi, li);
+  //XPBot.botWatcher['MainBot'] = require("./modules/botWatcher.js")(XPBot, wi, li);
   
   
   XPBot.floodgates = {};
-  let cnlsForFloodgates = ['chat_1_xp', 'chat_2_jk', 'chat_3_honobono', 'chat_4_crypto', 'kids_room', 'xp_radio802', 'register_room', 'bot-spam', 'bot-spam2', 'fiatbot_room'];
+  let cnlsForFloodgates = ['chat_1_xp', 'chat_2_jk', 'chat_3_honobono', 'chat_4_crypto', 'kids_room', 'xp_radio802', 'register_room', 'bot-spam', 'bot-spam2', 'fiatbot_room', 'make_it_storm'];
   
   cnlsForFloodgates.forEach(cnl => {
     let inf = {
@@ -146,10 +147,10 @@ const init = async () => {
         condCounterReset: (msg, current) => {
           return false; 
         }, 
-        numCheck: 5
+        numCheck: 10
       }
     };
-    XPBot.floodgates[cnl] = require("./modules/chatFloodgate.js")(XPBot, inf);
+    //XPBot.floodgates[cnl] = require("./modules/chatFloodgate.js")(XPBot, inf);
   })
   
 
