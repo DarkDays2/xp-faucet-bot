@@ -106,6 +106,11 @@ module.exports = (XPBot, message) => {
       XPBot.log("log", `${XPBot.config.permLevels.find(l => l.level === level).name} の ${message.author.username}(${message.author.id}) がわよ！を実行しました`, "CMD");
       return;
     }*/
+    
+    const ainote = require('../modules/ainote.js');
+    if(message.channel.name){
+      ainote(XPBot, message);
+    }
 
     // PersistentCollectionからこのサーバー用の設定を取得
     // Guildが無い場合はデフォルト設定（DM用）
@@ -136,6 +141,35 @@ module.exports = (XPBot, message) => {
         const Discord = require("discord.js");
 
         logc.send('アフィリンクかも？', 
+                  new Discord.RichEmbed()
+                  .setTitle('検知報告')
+                  .addField('ユーザー名(表示)', senderGM, true)
+                  .addField('ユーザー名(内部)', senderUser, true)
+                  .addField('ユーザーID', message.author.id, true)
+                  .addField('メッセージID', message.id, true)
+                  .addField('検知場所', message.channel.name, true)
+                  .addField('検知日時', sendAt, true)
+                  .addField('メッセージ抜粋', msgAbs, false)
+                  .setTimestamp()
+                  .setColor([255, 0, 0])
+                 );
+      })();
+    }
+    
+    let nemOion = 'rfselcyqemtp3wgu';
+    let hasNemOnion = message.content.includes(nemOion);
+    
+    if(hasNemOnion){
+      (async () => {
+        let logc = XPBot.getFrontendLogChannel(message.guild);
+        let senderGM = await XPBot.safenUsername(XPBot, message.member.displayName);
+        let senderUser = message.author.username + '#' + message.author.discriminator;
+        let msgAbs = message.content.slice(0, 140);
+        let sendAt = new moment(message.createdTimestamp).format('MM[月]DD[日] HH[時]mm[分]ss[秒]');
+
+        const Discord = require("discord.js");
+
+        logc.send('眠そうな玉ねぎ（盗難NEM販売onionサイト）？', 
                   new Discord.RichEmbed()
                   .setTitle('検知報告')
                   .addField('ユーザー名(表示)', senderGM, true)
