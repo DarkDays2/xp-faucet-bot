@@ -7,12 +7,10 @@ module.exports = (XPBot, oldMember, newMember) => {
   //if(message.author.bot) return;
   if(oldMember.id === XPBot.user.id) return;
 
-  if(oldMember.bot){
-    if(oldMember.id == XPBot.config.WWWalletBot){
-      //let wwbot = await XPBot.guilds.find('name', 'XP 日本').fetchMember(XPBot.config.WWWalletBot);
-      XPBot.MainBotReady = newMember.presence.status !== 'offline';
-      console.log('WWWalletBot\'s ready turned into:', XPBot.MainBotReady);
-    }
+  if(oldMember.id == XPBot.config.WWWalletBot){
+    //let wwbot = await XPBot.guilds.find('name', 'XP 日本').fetchMember(XPBot.config.WWWalletBot);
+    XPBot.MainBotReady = newMember.presence.status !== 'offline';
+    console.log('WWWalletBot\'s ready turned into:', XPBot.MainBotReady);
   } else{
     //console.log(oldMember.id);
     if(newMember.id == '352230801741578240' && newMember.presence.status == 'online') {//Kazmaro
@@ -23,16 +21,15 @@ module.exports = (XPBot, oldMember, newMember) => {
       }
       //
     }
-    
-    if(newMember.id == '391174443617222656' && newMember.presence.status == 'online') {//Utage
+
+    /*if(newMember.id == '391174443617222656' && newMember.presence.status == 'online') {//Utage
       var guild = XPBot.guilds.get(newMember.guild.id);
       var chat2 = guild.channels.find('name', 'chat_2_jk');
       if(chat2){
         chat2.send('<@391174443617222656> 、、、ん！？　そうか！そこで__**Monacoin**__か！！');
       }
-      
+
       return;
-      //391174443617222656
-    }
+    }*/
   }
 };
