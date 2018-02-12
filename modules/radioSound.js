@@ -4,13 +4,14 @@ const ytdl = require('ytdl-core');
 var writeLog;
 
 module.exports = function(XPBot) {
-  let playYouTube = ({guild: guild, cnl: cnl, movieID: movieID, opts: {seek = 0, vol = 0.01}, funcStart: funcStart}) => {
+  let playYouTube = async ({guild: guild, cnl: cnl, movieID: movieID, opts: {seek = 0, vol = 0.01}, funcStart: funcStart}) => {
     let gID = guild.id.toString();
     
     if(typeof vol !== 'number') throw new TypeError('vol は数値でなければなりません');
 
     if(XPBot.radioCenter.data[gID].disp !== null){
-      XPBot.radioCenter.data[gID].disp.end('他のYouTube動画の再生開始');
+      await XPBot.radioCenter.ctrler.stop(guild);
+      //XPBot.radioCenter.data[gID].disp.end('他のYouTube動画の再生開始');
     }
 
     cnl.join().then(async cnc => {
@@ -35,13 +36,14 @@ module.exports = function(XPBot) {
     });
   };
   
-  let playFile = ({guild: guild, cnl: cnl, fileName: fileName, opts: {seek = 0, vol = 0.01}, funcStart: funcStart}) => {
+  let playFile = async ({guild: guild, cnl: cnl, fileName: fileName, opts: {seek = 0, vol = 0.01}, funcStart: funcStart}) => {
     let gID = guild.id.toString();
 
     if(typeof vol !== 'number') throw new TypeError('vol は数値でなければなりません');
 
     if(XPBot.radioCenter.data[gID].disp !== null){
-      XPBot.radioCenter.data[gID].disp.end('他の音楽ファイルの再生開始');
+      await XPBot.radioCenter.ctrler.stop(guild);
+      //XPBot.radioCenter.data[gID].disp.end('他の音楽ファイルの再生開始');
     }
     
     cnl.join().then(async cnc => {
@@ -176,8 +178,10 @@ module.exports = function(XPBot) {
     }
     XPBot.radioCenter.data[gID].disp.end('再生停止');
   }*/
-
-  XPBot.radioCenter.ctrler = {
+  
+  let oldCtrler = XPBot.radioCenter.ctrler;
+  
+  let newFuncs = {
     playYouTube: playYouTube,
     playFile: playFile,
     playFileAlias: playFileAlias,
@@ -190,6 +194,8 @@ module.exports = function(XPBot) {
     setVol: setVol,
     forceReset: forceReset
   };
+  
+  XPBot.radioCenter.ctrler = Object.assign(oldCtrler, newFuncs);
 
   writeLog = (title, contents)=>{
     XPBot.log('rSnd', contents, title);
