@@ -51,6 +51,28 @@ module.exports = (XPBot) => {
   XPBot.getGuildSettings = (guild) =>{
     return guild ? XPBot.settings.get(guild.id) : XPBot.config.defaultSettings;
   }
+  
+  XPBot.getRadioChatCnl = (vc) => {
+    let pairs = {
+      '374188134013075467': { //XP-JP
+        'XP_radio802': 'xp_radio802',
+        'freetalk': 'vc_freetalk',
+        'developer_only': '',
+        'ofuton': ''
+      },
+      '391108609460928521': { //Test
+        'general2': 'general' //MaysoTest
+      },
+      '397787014130565130' :{ //プレミアム
+        '会議室 - 01': ''
+      }
+    };
+    
+    if(vc.guild.id in pairs){
+      if(vc.name in pairs[vc.guild.id]) return pairs[vc.guild.id][vc.name];
+    }
+    
+  };
 
   /*
   SINGLE-LINE AWAITMESSAGE
