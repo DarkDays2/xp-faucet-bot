@@ -13,7 +13,7 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: "水道局長"
+  permLevel: "モデレーター"
 };
 
 exports.help = {
