@@ -72,16 +72,12 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
   if(!radioCnl){
     radioCnl = message.member.voiceChannel;
   }
-  //console.log(radioCnl);
-  /*var radioChatCnls = {
-    'XP_radio802': 'xp_radio802',
-    'freetalk': 'vc_freetalk',
-    'general2': 'general',
-    'developer_only': '',
-    'ofuton': ''
-  };*/
-
-  var radioChatCnl = guild.channels.find('name', XPBot.config.radioChatCnls[radioCnl.name]);
+  
+  let radioChatCnlName = XPBot.getRadioChatCnl(radioCnl);
+  var radioChatCnl;
+  
+  if(radioChatCnlName) radioChatCnl = guild.channels.find('name', radioChatCnlName);
+  
 
   if(subCmdName == 'bgm'){
     let type = args.shift().toLowerCase();
@@ -136,21 +132,9 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         opts: {vol: vol},
         funcStart: async () => {
           await XPBot.wait(1000);
-          radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
+          if(radioChatCnl) radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
         }
       });
-
-      /*radioCnl.join().then(async connection => {
-        var streamOptions = { seek: 0, volume: vol };
-        var stream = ytdl('https://www.youtube.com/watch?v=' + videoId, { filter : 'audioonly' });
-
-        await XPBot.wait(80);
-        var dispatcher = connection.playStream(stream, streamOptions);
-        dispatcher.on('start', async () => {
-          await XPBot.wait(1000);
-          radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
-        });
-      });*/
     } else{
       let vols = {
         'morning01': 0.3,
@@ -159,7 +143,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         'akarui1': 0.04,
         'akarui2': 0.04,
         'wafu': 0.04,
-        'izakaya01': 0.12
+        'izakaya01': 0.15
       };
 
       var vol = vols[type];
@@ -182,10 +166,11 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
             'atale': '',
             'akarui1': 'BGM提供: <@390069961340616704>さん',
             'akarui2': 'BGM提供: <@390069961340616704>さん',
-            'wafu': 'BGM提供: <@390069961340616704>さん'
+            'wafu': 'BGM提供: <@390069961340616704>さん',
+            'izakaya01': 'BGM: 「**居酒屋01**」 (<@353169534984912896>)\r\nYouTube: __*Uploading SOON!*__'
           };
 
-          if(msgs[type]){
+          if(msgs[type] && radioChatCnl){
             radioChatCnl.send(msgs[type]);
           }
         }
@@ -198,10 +183,6 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     radioCnl.join().then(async connection => {
       await XPBot.wait(100);
       var dispatcher = connection.playFile("././assets/jingle" + num + ".mp3", { volume: 0.5 , passes: 3, bitrate: 'auto'});
-      /*dispatcher.on('start', async () => {
-        await XPBot.wait(1000);
-        radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
-      });*/
     });
   }
 };
