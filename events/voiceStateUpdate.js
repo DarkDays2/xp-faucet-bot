@@ -22,8 +22,10 @@ module.exports = (XPBot, oldMember, newMember) => {
 
     let welcomeVC = m => {
       let radioCnl = m.voiceChannel;
-      let radioChatCnl = m.guild.channels.find('name', XPBot.config.radioChatCnls[radioCnl.name]);
-
+      let radioChatCnlName = XPBot.getRadioChatCnl(radioCnl);
+      if(!radioChatCnlName) return;
+      
+      let radioChatCnl = m.guild.channels.find('name', radioChatCnlName);
       if(!radioChatCnl) return;
 
       let numRadioMember = radioCnl.members.size;
