@@ -5,7 +5,19 @@ const lotSys = require('../modules/lotterySystem.js');
 module.exports = (XPBot, oldMember, newMember) => {
   if(!XPBot.ready) return;
   //if(message.author.bot) return;
-  if(oldMember.id === XPBot.user.id) return;
+  if(oldMember.id === XPBot.user.id){
+    if(oldMember.voiceChannelID !== newMember.voiceChannelID){
+      if(!newMember.voiceChannelID){
+        //console.log('none');
+        XPBot.user.setPresence({game: null});
+      } else{
+        let str = newMember.voiceChannel.name;
+        console.log(str);
+        XPBot.user.setActivity(str, {type: 'LISTENING'});
+      }
+    }
+    return;
+  }
 
   if(oldMember.bot){
   } else{
@@ -24,7 +36,7 @@ module.exports = (XPBot, oldMember, newMember) => {
       let radioCnl = m.voiceChannel;
       let radioChatCnlName = XPBot.getRadioChatCnl(radioCnl);
       if(!radioChatCnlName) return;
-      
+
       let radioChatCnl = m.guild.channels.find('name', radioChatCnlName);
       if(!radioChatCnl) return;
 
