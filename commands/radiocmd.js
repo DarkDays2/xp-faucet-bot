@@ -179,10 +179,12 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
 
   } else if(subCmdName == 'jingle'){
     let num = ('00' + args.shift().toString()).slice(-2);
-
-    radioCnl.join().then(async connection => {
-      await XPBot.wait(100);
-      var dispatcher = connection.playFile("././assets/jingle" + num + ".mp3", { volume: 0.5 , passes: 3, bitrate: 'auto'});
+    
+    XPBot.radioCenter.ctrler.playFile({
+      guild: guild,
+      cnl: radioCnl,
+      fileName: 'jingle' + num + '.mp3',
+      opts: {vol: 0.5}
     });
   }
 };
