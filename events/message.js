@@ -122,6 +122,7 @@ module.exports = (XPBot, message) => {
 
     // ユーザーもしくはメンバーの権限を取得
     const level = XPBot.permlevel(message);
+    const levelName = XPBot.config.permLevels.find(l => l.level === level).name;
     const MainBotPrefix = ',';
 
     let refString = ['?ref=', '&ref=', '?start=', '?c='];
@@ -234,17 +235,35 @@ module.exports = (XPBot, message) => {
       // 一部のコマンドはDMでは使用できないので、それを確認。
       if(cmd && !message.guild && cmd.conf.guildOnly)
         return message.channel.send("指定されたコマンドはDMでは使用できません。サーバー内でお試しください。");
-
-      if(level < XPBot.levelCache[cmd.conf.permLevel]) {
-        if(settings.systemNotice === "true") {
-          return message.channel.send(`:no_entry_sign: あなたは、指定されたコマンドを実行するのに必要な権限がありません。
-あなたの権限レベル: ${level} (${XPBot.config.permLevels.find(l => l.level === level).name})
+      
+      if(cmd.conf.specificAllowed){
+        console.log(cmd.conf.specificAllowed);
+        if(!(levelName in cmd.conf.specificAllowed)){
+          if(settings.systemNotice === "true"){
+            var req = '';
+            cmd.conf.specificAllowed.map(r => {
+              req += `/ ${r} (${XPBot.config.permLevels.find(l => l.name === r).level}) `
+            });
+            req = req.slice(2);
+            return message.channel.send(`:no_entry_sign: あなたは、指定されたコマンドを実行するのに必要な権限がありません。
+あなたの権限: ${levelName} (${level})
+許可されている権限: ${req}`);
+          } else{
+            return;
+          }
+        }
+      } else{
+        if(level < XPBot.levelCache[cmd.conf.permLevel]) {
+          if(settings.systemNotice === "true") {
+            return message.channel.send(`:no_entry_sign: あなたは、指定されたコマンドを実行するのに必要な権限がありません。
+あなたの権限レベル: ${level} (${levelName})
 要求されている権限レベル: ${XPBot.levelCache[cmd.conf.permLevel]} (${cmd.conf.permLevel})`);
-        } else {
-          return;
+          } else {
+            return;
+          }
         }
       }
-
+      
       // message引数の単純化のため、送信者の権限レベルをauthorオブジェクトに格納（メンバーではないのでDMでも使用可）
       // levelというコマンドモジュールの引数は将来的に非推奨になる可能性あり
       message.author.permLevel = level;
@@ -254,7 +273,7 @@ module.exports = (XPBot, message) => {
         message.flags.push(args.shift().slice(1));
       }
       // コマンドが存在し且つユーザーが権限を持っているとき、コマンドを実行
-      XPBot.log("log", `${XPBot.config.permLevels.find(l => l.level === level).name} の ${message.author.username}(${message.author.id}) が${cmd.help.name}コマンドを実行しました`, "CMD");
+      XPBot.log("log", `${levelName} の ${message.author.username}(${message.author.id}) が${cmd.help.name}コマンドを実行しました`, "CMD");
       cmd.run(XPBot, message, args, level);
     } else if(message.content.indexOf(MainBotPrefix) === 0){ //本家Botのコマンド
       const args = message.content.slice(MainBotPrefix.length).trim().split(/ +/g);
