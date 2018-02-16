@@ -35,23 +35,36 @@ module.exports = (XPBot) => {
   XPBot.log = (type, msg, title) => {
     let now = moment().format('YYYY-MM-DD HH:mm:ss.SS');
     if(!title) title = "Log";
-    
-    let str = `[${now}][${type}] [${title}]${msg}`;
-    if(title == 'ERR' || title == 'WAR') console.error(str);
-    else console.log(str);
-    //console.log(`[${now}][${type}] [${title}]${msg}`);
+    let strCOut = `[${now}][${type}] [${title}]${msg}`;
+    let strLS = `[${now}]\n[${type}]\n[${title}]${msg}`;
+    let ls = XPBot.getLogServer();
+
+    if(title == 'ERR' || title == 'WAR') {
+      console.error(strCOut);
+      if(ls) ls.channels.find('name', 'output').send(':warning: ' + strLS);
+    }
+    else {
+      console.log(strCOut);
+      if(ls) ls.channels.find('name', 'output').send(':information_source: ' + strLS);
+    }
   };
-  
+
   XPBot.getFrontendLogChannel = (guild) => {
     const settings = guild ? XPBot.settings.get(guild.id) : XPBot.config.defaultSettings;
     let logChannel = guild.channels.find('name', settings.modLogChannel);
     return logChannel;
   };
-  
+
+  XPBot.getLogServer = () => {
+    let s = XPBot.guilds.get(XPBot.config.logServer);
+    if(!s || !s.available) return null;
+    else return s;
+  };
+
   XPBot.getGuildSettings = (guild) =>{
     return guild ? XPBot.settings.get(guild.id) : XPBot.config.defaultSettings;
   }
-  
+
   XPBot.getRadioChatCnl = (vc) => {
     let pairs = {
       '374188134013075467': { //XP-JP
@@ -67,11 +80,11 @@ module.exports = (XPBot) => {
         '会議室 - 01': ''
       }
     };
-    
+
     if(vc.guild.id in pairs){
       if(vc.name in pairs[vc.guild.id]) return pairs[vc.guild.id][vc.name];
     }
-    
+
   };
 
   /*
@@ -119,19 +132,19 @@ module.exports = (XPBot) => {
 
     return text;
   };
-  
+
   XPBot.safenUsername = async (XPBot, text) => {
     if(text && text.constructor.name == "Promise")
       text = await text;
     if(typeof text !== "string")
       text = require("util").inspect(text, {depth: 0});
-  
+
     text = text
       .replace(/\*/g, "\\*")
       .replace(/_/g, "\\_")
       .replace(/~/g, "\\~")
       .replace(/`/g, "\\`");
-    
+
     return text;
   };
 
@@ -160,7 +173,7 @@ module.exports = (XPBot) => {
       command = XPBot.commands.get(XPBot.aliases.get(commandName));
     }
     if(!command) return `\`${commandName}\`コマンドは存在せず、エイリアスでもありません。もう一度お試しください。`;
-  
+
     if(command.shutdown) {
       await command.shutdown(XPBot);
     }
@@ -169,18 +182,18 @@ module.exports = (XPBot) => {
   };
 
   /* MISCELANEOUS NON-CRITICAL FUNCTIONS */
-  
+
   // EXTENDING NATIVE TYPES IS BAD PRACTICE. Why? Because if JavaScript adds this
   // later, this conflicts with native code. Also, if some other lib you use does
   // this, a conflict also occurs. KNOWING THIS however, the following 2 methods
   // are, we feel, very useful in code. 
-  
+
   // <String>.toPropercase() returns a proper-cased string such as: 
   // "Mary had a little lamb".toProperCase() returns "Mary Had A Little Lamb"
   String.prototype.toProperCase = function() {
     return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   };    
-  
+
   // <Array>.random() returns a single random element from an array
   // [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
   Array.prototype.random = function() {
@@ -196,10 +209,14 @@ module.exports = (XPBot) => {
     console.error("捕捉されなかった例外: ", errorMsg);
     // Always best practice to let the code crash on uncaught exceptions. 
     // Because you should be catching them anyway.
+    let ls = XPBot.getLogServer();
+    if(ls) ls.channels.find('name', 'output').send(`<@${XPBot.config.ownerID}> ` + ':no_entry: 補足されなかった例外:\n```' + errorMsg + '```');
     process.exit(1);
   });
 
   process.on("unhandledRejection", err => {
     console.error("捕捉されなかったPromiseのエラー: ", err);
+    let ls = XPBot.getLogServer();
+    if(ls) ls.channels.find('name', 'output').send(`<@${XPBot.config.ownerID}> ` + ':no_entry: 捕捉されなかったPromiseのエラー:\n```' + err + '```');
   });
 };
