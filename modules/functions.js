@@ -35,30 +35,17 @@ module.exports = (XPBot) => {
   XPBot.log = (type, msg, title) => {
     let now = moment().format('YYYY-MM-DD HH:mm:ss.SS');
     if(!title) title = "Log";
-    let strCOut = `[${now}][${type}] [${title}]${msg}`;
-    let strLS = `[${now}]\n[${type}]\n[${title}]${msg}`;
-    let ls = XPBot.getLogServer();
     
-    if(title == 'ERR' || title == 'WAR') {
-      console.error(strCOut);
-      if(ls) ls.channels.find('name', 'output').send(':warning: ' + strLS);
-    }
-    else {
-      console.log(strCOut);
-      if(ls) ls.channels.find('name', 'output').send(':information_source: ' + strLS);
-    }
+    let str = `[${now}][${type}] [${title}]${msg}`;
+    if(title == 'ERR' || title == 'WAR') console.error(str);
+    else console.log(str);
+    //console.log(`[${now}][${type}] [${title}]${msg}`);
   };
   
   XPBot.getFrontendLogChannel = (guild) => {
     const settings = guild ? XPBot.settings.get(guild.id) : XPBot.config.defaultSettings;
     let logChannel = guild.channels.find('name', settings.modLogChannel);
     return logChannel;
-  };
-  
-  XPBot.getLogServer = () => {
-    let s = XPBot.guilds.get(XPBot.config.logServer);
-    if(!s || !s.available) return null;
-    else return s;
   };
   
   XPBot.getGuildSettings = (guild) =>{
@@ -209,14 +196,10 @@ module.exports = (XPBot) => {
     console.error("捕捉されなかった例外: ", errorMsg);
     // Always best practice to let the code crash on uncaught exceptions. 
     // Because you should be catching them anyway.
-    let ls = XPBot.getLogServer();
-    if(ls) ls.channels.find('name', 'output').send(`<@${XPBot.config.ownerID}> ` + ':no_entry: 補足されなかった例外:\n```' + errorMsg + '```');
     process.exit(1);
   });
 
   process.on("unhandledRejection", err => {
     console.error("捕捉されなかったPromiseのエラー: ", err);
-    let ls = XPBot.getLogServer();
-    if(ls) ls.channels.find('name', 'output').send(`<@${XPBot.config.ownerID}> ` + ':no_entry: 捕捉されなかったPromiseのエラー:\n```' + err + '```');
   });
 };

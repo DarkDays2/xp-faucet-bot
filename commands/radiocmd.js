@@ -70,8 +70,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
   });
 
   if(!radioCnl){
-    if(message.member.voiceChannel) radioCnl = message.member.voiceChannel;
-    else return;
+    radioCnl = message.member.voiceChannel;
   }
   
   let radioChatCnlName = XPBot.getRadioChatCnl(radioCnl);
