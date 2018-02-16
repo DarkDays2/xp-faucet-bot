@@ -184,6 +184,39 @@ module.exports = (XPBot, message) => {
                  );
       })();
     }
+    
+    let PDGroup = ['%exx5830y'];
+    let isPDGruop = false;
+    PDGroup.map(s => {
+      if(message.content.includes(s)) isPDGruop = true;
+    })
+    
+    if(isPDGruop){
+      (async () => {
+        let logc = XPBot.getFrontendLogChannel(message.guild);
+        let senderGM = await XPBot.safenUsername(XPBot, message.member.displayName);
+        let senderUser = message.author.username + '#' + message.author.discriminator;
+        let msgAbs = message.content.slice(0, 140);
+        let sendAt = new moment(message.createdTimestamp).format('MM[月]DD[日] HH[時]mm[分]ss[秒]');
+
+        const Discord = require("discord.js");
+
+        logc.send('仕手って知ってる？', 
+                  new Discord.RichEmbed()
+                  .setTitle('検知報告')
+                  .addField('ユーザー名(表示)', senderGM, true)
+                  .addField('ユーザー名(内部)', senderUser, true)
+                  .addField('ユーザーID', message.author.id, true)
+                  .addField('メッセージID', message.id, true)
+                  .addField('検知場所', message.channel.name, true)
+                  .addField('検知日時', sendAt, true)
+                  .addField('メッセージ抜粋', msgAbs, false)
+                  .setTimestamp()
+                  .setColor([255, 0, 0])
+                 );
+      })();
+    }
+    
 
     if(message.content.indexOf(settings.prefix) === 0){ // XPFaucet-Botのコマンド
       // コマンド名と引数を分離
