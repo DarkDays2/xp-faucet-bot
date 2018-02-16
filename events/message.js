@@ -235,10 +235,9 @@ module.exports = (XPBot, message) => {
       // 一部のコマンドはDMでは使用できないので、それを確認。
       if(cmd && !message.guild && cmd.conf.guildOnly)
         return message.channel.send("指定されたコマンドはDMでは使用できません。サーバー内でお試しください。");
-      
+
       if(cmd.conf.specificAllowed){
-        console.log(cmd.conf.specificAllowed);
-        if(!(levelName in cmd.conf.specificAllowed)){
+        if(!cmd.conf.specificAllowed.includes(levelName)){
           if(settings.systemNotice === "true"){
             var req = '';
             cmd.conf.specificAllowed.map(r => {
