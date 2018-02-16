@@ -15,7 +15,7 @@ exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: ['ふらっく', 'フラック', 'ふらぐ', 'フラグ'],
-  permLevel: "水道局長"
+  permLevel: "モデレーター"
 };
 
 exports.help = {

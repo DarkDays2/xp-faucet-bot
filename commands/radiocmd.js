@@ -194,7 +194,8 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: "ラジオ放送者"
+  specificAllowed: ['水道局長', 'サーバー所有者', '管理者', 'モデレーター', 'ラジオ放送者'],
+  permLevel: "モデレーター"
 };
 
 exports.help = {

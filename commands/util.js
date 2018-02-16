@@ -111,7 +111,7 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: "ラボメンバー"
+  permLevel: "モデレーター"
 };
 
 exports.help = {
