@@ -11,6 +11,11 @@ module.exports = async function(XPBot, message) {
   let logc = XPBot.getFrontendLogChannel(message.guild);
   if(!logc) return;
   
+  if(!message.member) {
+    writeLog('ERR', `GuildMemberが取得できませんでした: ${message.author.username}#${message.author.discriminator} (${message.author.id})`);
+    return;
+  }
+  
   let senderGM = await XPBot.safenUsername(XPBot, message.member.displayName),
       senderUser = message.author.username + '#' + message.author.discriminator,
       msgAbs = message.content.slice(0, 140),
