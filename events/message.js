@@ -26,40 +26,17 @@ module.exports = (XPBot, message) => {
 
         let userName = userField.value;
 
-        //console.log(userName);
         if(!userName) return;
 
         if(!XPBot.config.allowedBalanceCnls.includes(message.channel.name)){
           message.delete()
             .then(msg => {
             console.log('[Deleted]', message.channel.name);
-            //message.channel.send('`,balance`コマンドは <#375532870376357889> チャンネルでお使いください');
           }).message(e=>{
             if(e.code === 10008) /*空文*/ ;
             else console.error(e);
           });
         }
-
-        (async () => {
-          let fetchedUsers = await message.guild.fetchMembers(userName, 10);
-
-          console.log('catched balance', userName);
-          console.log(fetchedUsers.members.size);
-        })();
-
-
-        //console.log(userF.value);
-
-
-        /*XPBot.db.walletDB.addAddress(userID, userAddress, 'Bot')
-          .then(()=>{
-          //message.channel.send('DBに登録しました');
-        })
-          .catch((ex)=>{
-          message.channel.send('DBに登録失敗');
-        });
-
-        XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'balance');*/
         return;
       }
 
