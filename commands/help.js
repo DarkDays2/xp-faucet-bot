@@ -50,11 +50,11 @@ exports.run = (XPBot, message, args, level) => {
       
       if(command.conf.specificAllowed){
         if(command.conf.specificAllowed.includes(levelName)){
-          message.channel.send(`= ${command.help.name} = \n\n${command.help.description}\n\n使用法　　:: ${command.help.usage}\n\nエイリアス:: ${command.conf.aliases.join(", ")}\n\n権限　　　:: ${command.conf.specificAllowed.join(' / ')}\n\n= ${command.help.name} =`, {code:"asciidoc"});
+          message.channel.send(`= ${command.help.name} = \n\n${command.help.description}\n\n使用法　　:: ${command.help.usage}\nエイリアス:: ${command.conf.aliases.join(", ")}\n権限　　　:: ${command.conf.specificAllowed.join(' / ')}\n\n= ${command.help.name} =`, {code:"asciidoc"});
         }
       } else{
         if(level >= XPBot.levelCache[command.conf.permLevel]) {
-          message.channel.send(`= ${command.help.name} = \n\n${command.help.description}\n\n使用法　　:: ${command.help.usage}\n\nエイリアス:: ${command.conf.aliases.join(", ")}\n\n権限　　　:: ${command.conf.permLevel} 以上\n\n= ${command.help.name} =`, {code:"asciidoc"});
+          message.channel.send(`= ${command.help.name} = \n\n${command.help.description}\n\n使用法　　:: ${command.help.usage}\nエイリアス:: ${command.conf.aliases.join(", ")}\n権限　　　:: ${command.conf.permLevel} 以上\n\n= ${command.help.name} =`, {code:"asciidoc"});
         }
       }
       
