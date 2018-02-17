@@ -1,6 +1,7 @@
 // Messageイベントはメッセージを受信した全てのタイミングで発火します。
 // 注: Botは全てのイベントに関連付けられているため、関数実行時全てのイベントに
 // XPBot, other, args が渡されます。
+const moment = require("moment");
 module.exports = (XPBot, message) => {
   if(!XPBot.ready) return;
   //if(message.author.bot) return;
@@ -80,6 +81,22 @@ module.exports = (XPBot, message) => {
       XPBot.log("log", `${XPBot.config.permLevels.find(l => l.level === level).name} の ${message.author.username}(${message.author.id}) がわよ！を実行しました`, "CMD");
       return;
     }*/
+    
+    if(message.channel.type == 'dm'){
+      let ls = XPBot.getLogServer();
+      if(ls){
+        let time = moment(message.createdAt).format('YYYY-MM-DD HH:mm:ss.SS');
+        let username = message.author.username + '#' + message.author.discriminator;
+        let userID = message.author.id;
+        ls.channels.find('name', 'dm').send(`\`================================\`
+\`\`\`At: ${time}
+By: ${username} (${userID})\`\`\`
+${message.content}
+
+\`================================\``
+        );
+      }
+    }
     
     const ainote = require('../modules/ainote.js');
     if(message.channel.name){
