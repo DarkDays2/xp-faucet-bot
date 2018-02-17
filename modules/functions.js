@@ -36,7 +36,7 @@ module.exports = (XPBot) => {
     let now = moment().format('YYYY-MM-DD HH:mm:ss.SS');
     if(!title) title = "Log";
     let strCOut = `[${now}][${type}] [${title}]${msg}`;
-    let strLS = `[${now}]\n[${type}]\n[${title}]${msg}`;
+    let strLS = `[${now}] Type: ${type}\n` + '```' + `Title: ${title}\nContents: ${msg}` + '```';
     let ls = XPBot.getLogServer();
 
     if(title == 'ERR' || title == 'WAR') {
