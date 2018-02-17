@@ -17,7 +17,7 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
   
   let spamMsg = args.join(' ');
   
-  const settings = XPBot.getGuildSettings(message.guild);  
+  const settings = message.settings;//XPBot.getGuildSettings(message.guild);  
   
   if(spamMsg.indexOf(',') === 0){
     message.reply('`spam`コマンドで水道局にXp-Botコマンドを打たせることはできません :cop:');

@@ -9,7 +9,7 @@ exports.run = (XPBot, message, args, level) => {
   // 引数無しの場合、全てのコマンドを一覧表示する
   if(!args[0]) {
     // サーバーごとの設定読み込み
-    const settings = XPBot.getGuildSettings(message.guild);
+    const settings = message.settings//XPBot.getGuildSettings(message.guild);
     //const settings = message.guild ? XPBot.settings.get(message.guild.id) : XPBot.config.defaultSettings;
 
     // <Collection>.filter()関数で権限レベルでコマンドをフィルター
