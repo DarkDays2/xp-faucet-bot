@@ -8,8 +8,10 @@ module.exports = async function(XPBot, message) {
     XPBot.log('Snitch', contents, title);
   };
 
-  let logc = XPBot.getFrontendLogChannel(message.guild),
-      senderGM = await XPBot.safenUsername(XPBot, message.member.displayName),
+  let logc = XPBot.getFrontendLogChannel(message.guild);
+  if(!logc) return;
+  
+  let senderGM = await XPBot.safenUsername(XPBot, message.member.displayName),
       senderUser = message.author.username + '#' + message.author.discriminator,
       msgAbs = message.content.slice(0, 140),
       sendAt = new moment(message.createdTimestamp).format('MM[月]DD[日] HH[時]mm[分]ss[秒]');

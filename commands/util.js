@@ -50,7 +50,8 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
   } else if(subCmdName == 'reg'){
     //dockeXPBot.getFrontendLogChannel(message.guild).send(',register');
   } else if(subCmdName == 'bal'){
-    XPBot.getFrontendLogChannel(message.guild).send(',balance');
+    let logc = XPBot.getFrontendLogChannel(message.guild);
+    if(logc) logc.send(',balance');
   } else if(subCmdName == 'del'){
     let channel = message.channel;
 

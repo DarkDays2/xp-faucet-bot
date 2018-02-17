@@ -50,9 +50,13 @@ module.exports = (XPBot) => {
   };
 
   XPBot.getFrontendLogChannel = (guild) => {
-    const settings = guild ? XPBot.settings.get(guild.id) : XPBot.config.defaultSettings;
-    let logChannel = guild.channels.find('name', settings.modLogChannel);
-    return logChannel;
+    if(guild) {
+      const settings = guild ? XPBot.settings.get(guild.id) : XPBot.config.defaultSettings;
+      let logChannel = guild.channels.find('name', settings.modLogChannel);
+      return logChannel;
+    } else{
+      return null;
+    }
   };
 
   XPBot.getLogServer = () => {
