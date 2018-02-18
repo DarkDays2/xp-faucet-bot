@@ -3,6 +3,7 @@ module.exports = (XPBot) => {
     'stopwatch': '\u23f1',
     'timer': '\u23f2',
     'information_source': '\u2139',
+    'heart': '\u2764',
     'regional_indicator_a': String.fromCodePoint(0x1f1e6),
     'regional_indicator_b': String.fromCodePoint(0x1f1e7),
     'regional_indicator_c': String.fromCodePoint(0x1f1e8),
