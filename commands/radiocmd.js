@@ -144,7 +144,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         'akarui1': 0.04,
         'akarui2': 0.04,
         'wafu': 0.04,
-        'izakaya01': 0.15
+        'izakaya01': 0.07
       };
 
       var vol = vols[type];
@@ -185,7 +185,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
       guild: guild,
       cnl: radioCnl,
       fileName: 'jingle' + num + '.mp3',
-      opts: {vol: 0.5}
+      opts: {vol: 0.3}
     });
   }
 };
@@ -194,8 +194,8 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  specificAllowed: ['水道局長', 'サーバー所有者', '管理者', 'モデレーター', 'ラジオ放送者'],
-  permLevel: "モデレーター"
+  //specificAllowed: ['水道局長', 'サーバー所有者', '管理者', 'モデレーター', 'ラジオ放送者'],
+  permLevel: "ラジオ放送者"
 };
 
 exports.help = {
