@@ -12,7 +12,7 @@ module.exports = async function(XPBot, message) {
   if(!logc) return;
   
   if(!message.member) {
-    writeLog('ERR', `GuildMemberが取得できませんでした: ${message.author.username}#${message.author.discriminator} (${message.author.id})`);
+    //writeLog('ERR', `GuildMemberが取得できませんでした: ${message.author.username}#${message.author.discriminator} (${message.author.id})`);
     return;
   }
   
