@@ -5,7 +5,7 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
   var channels;
   if(args[0] == 'chatrooms') {
     args.shift();
-    channels = ['chat_1_xp', 'chat_2_jk', 'chat_3_honobono', 'chat_4_markets', 'chat_5_gamers', 'chat_6_creator'];
+    channels = ['chat_1_xp', 'chat_2_jk', 'chat_3_honobono', 'chat_4_markets', 'chat_5_gamers', 'chat_6_creator', 'chat_7_programming'];
   }
   else channels = args.shift().split(';');
   //var channels = args.shift().split(';'); //args[0]
