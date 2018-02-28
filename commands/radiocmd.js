@@ -146,8 +146,8 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         'akarui2': 0.04,
         'wafu': 0.04,
         'izakaya01': 0.07,
-        'bstheme': 0.4,
-        'tan3demo1': 0.2
+        'bstheme': 0.2,
+        'tan3demo1': 0.08
       };
 
       var vol = vols[type];
@@ -189,7 +189,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     XPBot.radioCenter.ctrler.playFile({
       guild: guild,
       cnl: radioCnl,
-      fileName: 'jingle' + num + '.mp3',
+      fileName: 'Jingle-' + num + '.mp3',
       opts: {vol: 0.3}
     });
   }
