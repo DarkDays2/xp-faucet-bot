@@ -74,7 +74,9 @@ module.exports = function(XPBot) {
       'akarui1': 'xp_akarui_hourly_loop.mp3',
       'akarui2': 'xp_akarui_2_halfhourly_loop.mp3',
       'wafu': 'xp_wafu_halfhourly_loop.mp3',
-      'izakaya01': 'BGM-Izakaya01.mp3'
+      'izakaya01': 'BGM-Izakaya01.mp3',
+      'bstheme': 'BGM-BSTheme.mp3',
+      'tan3demo1': 'BGM-Tan3demo1.mp3'
     };
     
     let filename = pairs[alias];

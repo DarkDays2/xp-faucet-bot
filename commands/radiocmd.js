@@ -31,7 +31,8 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
           '  akarui1   - ひとし氏制作BGM\r\n' + 
           '  akarui2   - ひとし氏制作BGM\r\n' + 
           '  wafu      - ひとし氏制作BGM\r\n' +
-          '  izakaya01 - 酒場風BGM\r\n\r\n' +
+          '  izakaya01 - 酒場風BGM\r\n' +
+          '  bstheme   - お大事ラジオテーマソング\r\n\r\n' +
           '== !!radiocmd bgm pause ==\r\n' +
           '現在流れているBGM・ジングルを一時停止させます\r\n\r\n' +
           '== !!radiocmd bgm resume ==\r\n' +
@@ -144,7 +145,9 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         'akarui1': 0.04,
         'akarui2': 0.04,
         'wafu': 0.04,
-        'izakaya01': 0.07
+        'izakaya01': 0.07,
+        'bstheme': 0.4,
+        'tan3demo1': 0.2
       };
 
       var vol = vols[type];
@@ -168,7 +171,9 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
             'akarui1': 'BGM提供: <@390069961340616704>さん',
             'akarui2': 'BGM提供: <@390069961340616704>さん',
             'wafu': 'BGM提供: <@390069961340616704>さん',
-            'izakaya01': 'BGM: 「**居酒屋01**」 (<@353169534984912896>)\r\nYouTube: __*Uploading SOON!*__'
+            'izakaya01': 'BGM: 「**居酒屋01**」 (<@353169534984912896>)\r\nYouTube: __*Uploading SOON!*__',
+            'bstheme': 'BGM: https://www.youtube.com/watch?v=8MtQWSqkwOU',
+            'tan3demo1': 'BGM提供: <@391189305604964353>さん'
           };
 
           if(msgs[type] && radioChatCnl){
