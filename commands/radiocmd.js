@@ -32,7 +32,8 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
           '  akarui2   - ひとし氏制作BGM\r\n' + 
           '  wafu      - ひとし氏制作BGM\r\n' +
           '  izakaya01 - 酒場風BGM\r\n' +
-          '  bstheme   - お大事ラジオテーマソング\r\n\r\n' +
+          '  bstheme   - お大事ラジオテーマソング\r\n' +
+          '  tan3demo  - でこぽん8848制作BGM\r\n\r\n' +
           '== !!radiocmd bgm pause ==\r\n' +
           '現在流れているBGM・ジングルを一時停止させます\r\n\r\n' +
           '== !!radiocmd bgm resume ==\r\n' +
