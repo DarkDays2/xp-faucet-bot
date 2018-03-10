@@ -74,6 +74,7 @@ module.exports = (XPBot) => {
       '374188134013075467': { //XP-JP
         'XP_radio802': 'xp_radio802',
         'freetalk': 'vc_freetalk',
+        'VC_2': 'vc_2_txt',
         'developer_only': '',
         'ofuton': ''
       },
