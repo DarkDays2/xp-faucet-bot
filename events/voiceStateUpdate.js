@@ -8,9 +8,12 @@ module.exports = (XPBot, oldMember, newMember) => {
   if(oldMember.id === XPBot.user.id){
     if(oldMember.voiceChannelID !== newMember.voiceChannelID){
       if(!newMember.voiceChannelID){
-        //console.log('none');
+        if(oldMember.voiceChannel.guild.id !== '374188134013075467') return;
+        
         XPBot.user.setPresence({game: null});
       } else{
+        if(newMember.voiceChannel.guild.id !== '374188134013075467') return;
+        
         let str = newMember.voiceChannel.name;
         console.log(str);
         XPBot.user.setActivity(str, {type: 'LISTENING'});
