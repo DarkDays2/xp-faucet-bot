@@ -5,7 +5,8 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
   var channels;
   if(args[0] == 'chatrooms') {
     args.shift();
-    channels = ['chat_1_xp', 'chat_2_jk', 'chat_3_honobono', 'chat_4_markets', 'chat_5_gamers', 'chat_6_creator', 'chat_7_programming'];
+    channels = ['1組_xpホルダー', '2組_わよ', '3組_ほのぼの', '4組_相場', 'ゲーム部', 'クリエイター部', 'プログラミング部'];
+    //channels = ['1組_xpホルダー', '2組_わよ', '3組_ほのぼの', '4組_相場', '5組_xp議論', 'ゲーム部', 'クリエイター部', 'プログラミング部'];
   }
   else channels = args.shift().split(';');
   //var channels = args.shift().split(';'); //args[0]
