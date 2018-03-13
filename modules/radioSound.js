@@ -20,9 +20,10 @@ module.exports = function(XPBot) {
   };
   
   let playYouTube = async ({guild: guild, cnl: cnl, movieID: movieID, opts: {seek = 0, vol = 0.01}, funcStart: funcStart}) => {
-    let gID = guild.id.toString();
+    let gID = guild.id.toString(),
+        vol = vol - 0;
     
-    if(typeof vol !== 'number') throw new TypeError('vol は数値でなければなりません');
+    if(isNaN(vol)) throw new TypeError('vol は数値に変換できる必要があります');
 
     if(XPBot.radioCenter.data[gID].disp !== null){
       await XPBot.radioCenter.ctrler.stop(guild, '他のYouTube動画の再生開始');
@@ -40,9 +41,10 @@ module.exports = function(XPBot) {
   };
   
   let playFile = async ({guild: guild, cnl: cnl, fileName: fileName, opts: {seek = 0, vol = 0.01}, funcStart: funcStart}) => {
-    let gID = guild.id.toString();
+    let gID = guild.id.toString(),
+        vol = vol - 0;
 
-    if(typeof vol !== 'number') throw new TypeError('vol は数値でなければなりません');
+    if(isNaN(vol)) throw new TypeError('vol は数値に変換できる必要があります');
 
     if(XPBot.radioCenter.data[gID].disp !== null){
       await XPBot.radioCenter.ctrler.stop(guild, '他の音楽ファイルの再生開始');
