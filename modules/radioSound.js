@@ -4,12 +4,11 @@ const ytdl = require('ytdl-core');
 var writeLog;
 
 module.exports = function(XPBot) {
-  let registerDisposingHandler = (gID, cnl) => {
+  let registerDisposingHandler = (gID, cnc) => {
     XPBot.radioCenter.data[gID].disp.on('end', r => {
       XPBot.radioCenter.dataReset(gID);
       if(XPBot.radioCenter.data[gID].autonext) XPBot.radioCenter.ctrler.dequeue(guild);
     });
-    XPBot.radioCenter.data[gID].virtualVol = vol;
 
     let numDcn = cnc.listenerCount('disconnect');
     if(numDcn < 1){
@@ -20,8 +19,8 @@ module.exports = function(XPBot) {
   };
   
   let playYouTube = async ({guild: guild, cnl: cnl, movieID: movieID, opts: {seek = 0, vol = 0.01}, funcStart: funcStart}) => {
-    let gID = guild.id.toString(),
-        vol = vol - 0;
+    let gID = guild.id.toString();
+    vol = vol - 0;
     
     if(isNaN(vol)) throw new TypeError('vol は数値に変換できる必要があります');
 
@@ -36,13 +35,14 @@ module.exports = function(XPBot) {
       XPBot.radioCenter.data[gID].disp = cnc.playStream(stream, opts);
       if(typeof funcStart === 'function') XPBot.radioCenter.data[gID].disp.on('start', funcStart);
       
-      registerDisposingHandler(gID, cnl);
+      registerDisposingHandler(gID, cnc);
+      XPBot.radioCenter.data[gID].virtualVol = vol;
     });
   };
   
   let playFile = async ({guild: guild, cnl: cnl, fileName: fileName, opts: {seek = 0, vol = 0.01}, funcStart: funcStart}) => {
-    let gID = guild.id.toString(),
-        vol = vol - 0;
+    let gID = guild.id.toString();
+    vol = vol - 0;
 
     if(isNaN(vol)) throw new TypeError('vol は数値に変換できる必要があります');
 
@@ -50,7 +50,14 @@ module.exports = function(XPBot) {
       await XPBot.radioCenter.ctrler.stop(guild, '他の音楽ファイルの再生開始');
     }
     
-    registerDisposingHandler(gID, cnl);
+    cnl.join().then(async cnc => {
+      let opts = {seek: seek, volume: vol, passes: 3, bitrate: 'auto'};
+      XPBot.radioCenter.data[gID].disp = cnc.playFile('././assets/' + fileName, opts);
+      if(typeof funcStart === 'function') XPBot.radioCenter.data[gID].disp.on('start', funcStart);
+      
+      registerDisposingHandler(gID, cnc);
+      XPBot.radioCenter.data[gID].virtualVol = vol;
+    });
   };
   
   let playFileAlias = ({guild: guild, cnl: cnl, alias: alias, opts: {seek: seek = 0, vol: vol = 0.01}, funcStart: funcStart}) => {
@@ -103,7 +110,7 @@ module.exports = function(XPBot) {
 
   let pause = async (guild) => {
     let gID = guild.id.toString();
-    await XPBot.radioCenter.ctrler.fade(guild, 0, true, 1000, true);
+    await XPBot.radioCenter.ctrler.fade(guild, 0, 1000, true);
     XPBot.radioCenter.data[gID].disp.pause();
   };
 
@@ -111,9 +118,9 @@ module.exports = function(XPBot) {
     let gID = guild.id.toString();
     let vol = XPBot.radioCenter.data[gID].virtualVol;
     XPBot.radioCenter.data[gID].disp.resume();
-    XPBot.radioCenter.ctrler.changeVol(guild, 0, false, null, true);
+    XPBot.radioCenter.ctrler.changeVol(guild, 0, false);
     await XPBot.wait(500);
-    await XPBot.radioCenter.ctrler.fade(guild, vol, true, 1500, true);
+    await XPBot.radioCenter.ctrler.fade(guild, vol, 1500, true);
   }
 
   let changeVol = (guild, vol, prevVirtualVolChange) => {
@@ -129,7 +136,7 @@ module.exports = function(XPBot) {
     return true; 
   }
   
-  let fade = (guild, vol, fade, fadeSpan, prevVirtualVolChange) => {
+  let fade = (guild, vol, fadeSpan, prevVirtualVolChange) => {
     let gID = guild.id.toString();
     if(typeof vol !== 'number') throw new TypeError('vol は数値でなければなりません');
 
