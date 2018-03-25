@@ -103,19 +103,15 @@ module.exports = function(XPBot) {
   };
 
   let stop = async (guild, reason = '再生停止') => {
-    let gID = guild.id.toString();
-    if(!XPBot.radioCenter.data[gID].disp) return;
-    
-    await XPBot.radioCenter.ctrler.fade(guild, 0, 2000, true);
-    XPBot.radioCenter.data[gID].disp.end(reason);
+    let gID = guild.id.toString();    
+    await XPBot.radioCenter.ctrler.fade(guild, 0, 1000, true);
+    if(XPBot.radioCenter.data[gID].disp) XPBot.radioCenter.data[gID].disp.end(reason);
   };
 
   let pause = async (guild) => {
     let gID = guild.id.toString();
-    if(!XPBot.radioCenter.data[gID].disp) return;
-    
     await XPBot.radioCenter.ctrler.fade(guild, 0, 1000, true);
-    XPBot.radioCenter.data[gID].disp.pause();
+    if(XPBot.radioCenter.data[gID].disp) XPBot.radioCenter.data[gID].disp.pause();
   };
 
   let resume = async(guild) => {
@@ -160,10 +156,11 @@ module.exports = function(XPBot) {
     return new Promise(async (resolve, reject) => {
       for(let i = 0; i < times; i++){
         fVol += step;
-        XPBot.radioCenter.data[gID].disp.setVolume(fVol);
+        if(XPBot.radioCenter.data[gID].disp) XPBot.radioCenter.data[gID].disp.setVolume(fVol);
+        else break;
         await XPBot.wait(50);
       }
-      XPBot.radioCenter.data[gID].disp.setVolume(vol);
+      if(XPBot.radioCenter.data[gID].disp) XPBot.radioCenter.data[gID].disp.setVolume(vol);
       resolve();
     });
   }
