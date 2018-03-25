@@ -4,7 +4,7 @@ const ytdl = require('ytdl-core');
 var writeLog;
 
 module.exports = function(XPBot) {
-  let registerDisposingHandler = (gID, cnc) => {
+  let _registerDisposingHandler = (gID, cnc) => {
     XPBot.radioCenter.data[gID].disp.on('end', r => {
       XPBot.radioCenter.dataReset(gID);
       if(XPBot.radioCenter.data[gID].autonext) XPBot.radioCenter.ctrler.dequeue(guild);
@@ -35,7 +35,7 @@ module.exports = function(XPBot) {
       XPBot.radioCenter.data[gID].disp = cnc.playStream(stream, opts);
       if(typeof funcStart === 'function') XPBot.radioCenter.data[gID].disp.on('start', funcStart);
       
-      registerDisposingHandler(gID, cnc);
+      _registerDisposingHandler(gID, cnc);
       XPBot.radioCenter.data[gID].virtualVol = vol;
     });
   };
@@ -55,7 +55,7 @@ module.exports = function(XPBot) {
       XPBot.radioCenter.data[gID].disp = cnc.playFile('././assets/' + fileName, opts);
       if(typeof funcStart === 'function') XPBot.radioCenter.data[gID].disp.on('start', funcStart);
       
-      registerDisposingHandler(gID, cnc);
+      _registerDisposingHandler(gID, cnc);
       XPBot.radioCenter.data[gID].virtualVol = vol;
     });
   };
@@ -104,18 +104,24 @@ module.exports = function(XPBot) {
 
   let stop = async (guild, reason = '再生停止') => {
     let gID = guild.id.toString();
-    //await XPBot.radioCenter.ctrler.setVol(guild, 0, true, 2000);
+    if(!XPBot.radioCenter.data[gID].disp) return;
+    
+    await XPBot.radioCenter.ctrler.fade(guild, 0, 2000, true);
     XPBot.radioCenter.data[gID].disp.end(reason);
   };
 
   let pause = async (guild) => {
     let gID = guild.id.toString();
+    if(!XPBot.radioCenter.data[gID].disp) return;
+    
     await XPBot.radioCenter.ctrler.fade(guild, 0, 1000, true);
     XPBot.radioCenter.data[gID].disp.pause();
   };
 
   let resume = async(guild) => {
     let gID = guild.id.toString();
+    if(!XPBot.radioCenter.data[gID].disp) return;
+    
     let vol = XPBot.radioCenter.data[gID].virtualVol;
     XPBot.radioCenter.data[gID].disp.resume();
     XPBot.radioCenter.ctrler.changeVol(guild, 0, false);
@@ -125,6 +131,7 @@ module.exports = function(XPBot) {
 
   let changeVol = (guild, vol, prevVirtualVolChange) => {
     let gID = guild.id.toString();
+    if(!XPBot.radioCenter.data[gID].disp) return;
     if(typeof vol !== 'number') throw new TypeError('vol は数値でなければなりません');
     
     //if(vol > 2) vol = 2;
@@ -138,6 +145,7 @@ module.exports = function(XPBot) {
   
   let fade = (guild, vol, fadeSpan, prevVirtualVolChange) => {
     let gID = guild.id.toString();
+    if(!XPBot.radioCenter.data[gID].disp) return;
     if(typeof vol !== 'number') throw new TypeError('vol は数値でなければなりません');
 
     //if(vol > 2) vol = 2;
