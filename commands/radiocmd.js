@@ -95,9 +95,9 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         let fade = args.shift();
         if(fade == 'fade'){
           let fadeSpan = parseFloat(args.shift());
-          XPBot.radioCenter.ctrler.setVol(guild, newVol, true, fadeSpan);
+          XPBot.radioCenter.ctrler.fade(guild, newVol, fadeSpan);
         } else{
-          XPBot.radioCenter.ctrler.setVol(guild, newVol, false);
+          XPBot.radioCenter.ctrler.changeVol(guild, newVol, false);
         }
       }
     }
