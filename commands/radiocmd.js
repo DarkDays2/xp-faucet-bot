@@ -76,7 +76,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     else return;
   }
   
-  let radioChatCnlName = XPBot.getRadioChatCnl(radioCnl);
+  let radioChatCnlName = XPBot.getRadioChatCnl(guild, radioCnl);
   var radioChatCnl;
   
   if(radioChatCnlName) radioChatCnl = guild.channels.find('name', radioChatCnlName);

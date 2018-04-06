@@ -24,20 +24,9 @@ module.exports = (XPBot, oldMember, newMember) => {
 
   if(oldMember.bot){
   } else{
-    /*let oldC = oldMember.voiceChannel ? oldMember.voiceChannel.name : 'null';
-    let newC = newMember.voiceChannel ? newMember.voiceChannel.name : 'null';
-    console.log(newMember.displayName, oldC, newC);*/
-    /*var radioChatCnls = {
-      'XP_radio802': 'xp_radio802',
-      'freetalk': 'vc_freetalk',
-      'general2': 'general',
-      'developer_only': '',
-      'ofuton': ''
-    };*/
-
     let welcomeVC = m => {
       let radioCnl = m.voiceChannel;
-      let radioChatCnlName = XPBot.getRadioChatCnl(radioCnl);
+      let radioChatCnlName = XPBot.getRadioChatCnl(m.guild, radioCnl);
       if(!radioChatCnlName) return;
 
       let radioChatCnl = m.guild.channels.find('name', radioChatCnlName);
