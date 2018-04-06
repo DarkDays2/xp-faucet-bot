@@ -141,7 +141,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     } else{
       let vols = {
         'morning01': 0.3,
-        'techno01': 0.3,
+        'techno01': 0.45,
         'atale': 0.3,
         'akarui1': 0.04,
         'akarui2': 0.04,
@@ -169,9 +169,9 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
             'morning01': '',
             'techno01': '',
             'atale': '',
-            'akarui1': 'BGM提供: <@390069961340616704>さん',
-            'akarui2': 'BGM提供: <@390069961340616704>さん',
-            'wafu': 'BGM提供: <@390069961340616704>さん',
+            'akarui1': 'BGM提供: ひとしさん',
+            'akarui2': 'BGM提供: ひとしさん',
+            'wafu': 'BGM提供: ひとしさん',
             'izakaya01': 'BGM: 「**居酒屋01**」 (<@353169534984912896>)\r\nYouTube: __*Uploading SOON!*__',
             'bstheme': 'BGM: https://www.youtube.com/watch?v=8MtQWSqkwOU',
             'tan3demo1': 'BGM提供: <@391189305604964353>さん'
@@ -187,11 +187,15 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
   } else if(subCmdName == 'jingle'){
     let num = ('00' + args.shift().toString()).slice(-2);
     
+    /*仮措置*/
+    var v = 0.3;
+    if(num === '05') v = 0.1;
+    
     XPBot.radioCenter.ctrler.playFile({
       guild: guild,
       cnl: radioCnl,
       fileName: 'Jingle-' + num + '.mp3',
-      opts: {vol: 0.3}
+      opts: {vol: v}
     });
   }
 };
