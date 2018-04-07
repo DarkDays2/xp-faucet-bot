@@ -5,11 +5,9 @@ exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no
   var channels;
   
   let values = XPBot.vpg.getValues(guild.id);
-  if(values && values.channelAliases){
-    if(args[0] in values.channelAliases){
-      channels = values.channelAliases[args[0]];
-      args.shift();
-    }
+  if(values && values.channelAliases && args[0] in values.channelAliases){
+    channels = values.channelAliases[args[0]];
+    args.shift();
   } else{
     channels = args.shift().split(';');
   }

@@ -28,8 +28,11 @@ module.exports = (XPBot, message) => {
         let userName = userField.value;
 
         if(!userName) return;
-
-        if(!XPBot.config.allowedBalanceCnls.includes(message.channel.name)){
+        
+        let v = XPBot.vpg.getValues(message.guild.id);
+        if(!v) return;
+        
+        if(v.allowedBalanceCnls && !v.allowedBalanceCnls.includes(message.channel.name)){
           message.delete()
             .then(msg => {
             console.log('[Deleted]', message.channel.name);
@@ -193,7 +196,10 @@ ${message.content}
       }else{
 
         if(command == 'balance'){
-          if(!XPBot.config.allowedBalanceCnls.includes(message.channel.name)){
+          let v = XPBot.vpg.getValues(message.guild.id);
+          if(!v) return;
+
+          if(v.allowedBalanceCnls && !v.allowedBalanceCnls.includes(message.channel.name)){
             message.channel.send('<@' + message.author.id + '> `,balance`コマンドは <@352815000257167362> に直接DMしてお使いください');
           }
         }
