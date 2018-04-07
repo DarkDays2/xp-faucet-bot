@@ -1,19 +1,21 @@
 exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no-unused-vars
   message.delete();
   message.channel.send('__**歴代utageコマンド**（一部記録消失）__\r\n\r\n' + 
-                       '【元祖】\r\n<@391174443617222656> 、、、ん！？　そうか！そこで__**Monacoin**__か！！\r\n\r\n' +
+                       '【元祖】\r\n、、、ん！？　そうか！そこで__**Monacoin**__か！！\r\n\r\n' +
                        '【01】\r\nutage = Tokyo(福岡) = :muscle::seedling::fire:\r\n:congratulations:SimplePOSPool:muscle:対応\r\n\r\n' +
                        '【02】\r\nutage「flacさぁ～ん」\r\n:bank::bank:バンクエラ:bank::bank:\r\n\r\n' +
                        '【03】\r\nうたげ棒企画の発案者は実はumai\r\nI am シャイボーイ\r\n\r\n' +
                        '【04】\r\nうたげ棒企画の発案者は実はumai\n「胸がきゅっとなります」\nチョコレートの話は甘くて苦いマーマレードみたいですね\r\n\r\n' +
-                       '【新01】\r\nutage「このラジオ（のキャラ）がmacchasubさんなのか！」\r\n\r\n' +
+                       '【新01】\r\nutage「このラジオ（のキャラ）がmacchasubさんだったんですか」\r\n\r\n' +
                        '【新02】\r\nutage「脳内で済ませればホワイトペーパー」\r\n\r\n' +
                        '【新03】\r\nutage「女装は__まだ__目覚めてない」\r\n\r\n' +
-                       '【新04】\r\n**STOP! 止まってutage!**\r\n\r\n' +
+                       '【新04】\r\n**RESET! 止まってutage!**\r\n\r\n' +
                        '【伝説1】\r\nutage「二人で七並べ誘われたらプロポーズかなっておもう」\r\n\r\n' +
-                       '【伝説2】\r\nutage「踊りたい雨の中で\r\n強く抱きしめるよ」\r\n\r\n')
+                       '【伝説2】\r\nutage「踊りたい雨の中で\r\n強く抱きしめるよ」\r\n\r\n' + 
+                       '【勘違い1】\r\n~~ショーツ食べに行こう！~~ ショーツは外してｗｗ\r\n\r\n' + 
+                       '【川柳1】\r\n愛のPoS　君への重い　coinday\r\n\r\n')
   //message.channel.send('現在停止中')
-    .then(m => m.delete(10000))
+    .then(m => m.delete(30000))
     .catch(e => {
     if(e.code === 10008) XPBot.log('Utage', 'メッセージは既に削除されています: ' + e.path, 'ERR');
     else console.error(e);
@@ -30,6 +32,6 @@ exports.conf = {
 exports.help = {
   name: "utage",
   category: "ネタ",
-  description: "utage (3月3日現在)",
+  description: "utage (3月25日現在)",
   usage: "utage"
 };
