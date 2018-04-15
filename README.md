@@ -12,8 +12,10 @@ Now, MaySoMusician has published the first and final release including community
 2. Clone or download this repositry.
 3. Install dependencies by executing `npm install`.
 4. If you can't play the sounds, on Windows, uninstall `ffmpeg-binaries` and reinstall it into global environmental.
+
         npm uninstall ffmpeg-binaries
         npm install ffmpeg-binaries -g
+
 5. Copy `config.js.sample` and rename it to `config.js`.
 6. Fill in the bot owner's Discord account ID and the token of the bot.
 
@@ -23,7 +25,7 @@ Now, MaySoMusician has published the first and final release including community
         ...
             // Botのトークン。 https://discordapp.com/developers/applications/me で調べる。
             "token": "<Fill in the bot's token>",
-            
+
 7. Fill in the other settings according to the comments in `config.js`.
 8. Copy `valuePerGuild.js.sample`, rename it to `valuePerGuild.js`, and change values suitably if you want.
 
