@@ -16,12 +16,14 @@ Now, MaySoMusician has published the first and final release, including communit
         npm install ffmpeg-binaries -g
 5. Copy `config.js.sample` and rename it to `config.js`.
 6. Fill in the bot owner's Discord account ID and the token of the bot.
+
         const config = {
             // Bot所有者のユーザーID。既定で権限レベル10。Bot所有者以外のユーザーIDは絶対に指定しないこと。
             "ownerID": "<Fill in owner's Discord ID>",
         ...
             // Botのトークン。 https://discordapp.com/developers/applications/me で調べる。
             "token": "<Fill in the bot's token>",
+            
 7. Fill in the other settings according to the comments in `config.js`.
 8. Copy `valuePerGuild.js.sample`, rename it to `valuePerGuild.js`, and change values suitably if you want.
 
