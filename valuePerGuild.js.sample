@@ -1,0 +1,31 @@
+const values = {
+  "374188134013075467": { //XP 日本
+    "radioChatCnls": {
+      'XP_radio802': 'xp_radio802',
+      'freetalk': 'vc_freetalk',
+      'VC_2': 'vc_2_txt',
+      'developer_only': '',
+      'ofuton': ''
+    },
+    "allowedBalanceCnls": [
+      'mod_room', 'mgr_room', 'marketing-team', 'bot_control' ,'support_team', 'radio_meeting', 'reception_office', 
+      //'xp-bot専用部屋',
+      'development_team',// 'xpjp_coin-dev', 'dev_discussion',
+      'help', 'help_win', 'help_mac'
+    ],
+    "channelAliases": {
+      "chats": ['1組_xpホルダー', '2組_jkわよ', '3組_ほのぼの', '4組_相場'],
+      "actvs": ['ゲーム部', 'クリエイター部', 'プログラミング部', 'アウトドア部', '給食室', '図書室', '競馬研究会', '麻雀愛好会'],
+      "all": ['1組_xpホルダー', '2組_jkわよ', '3組_ほのぼの', '4組_相場', '5組_xp議論', 'きっずるーむ', 'ゲーム部', 'クリエイター部', 'プログラミング部', 'アウトドア部', '給食室', '図書室', '競馬研究会', '麻雀愛好会'],
+      "kids": ['きっずるーむ'],
+    }
+  },
+  
+  getValues: (gID) => {
+    console.log(gID);
+    if(gID in values) return values[gID];
+    else return null;
+  }
+};
+
+module.exports = values;
