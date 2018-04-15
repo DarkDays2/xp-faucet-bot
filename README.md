@@ -4,7 +4,7 @@
 
 At first, MaySoMusician started developing this bot for providing the functions of XP coin faucet. After he found it would be difficult, however, he cancelled that plan and changed course for adding the functions for community moderation and the radio system.
 
-Now, MaySoMusician has published the first and final release, including community moderation functions. Those function, such as `spam` commands or translating Xp-Bot error messages, are going to be deleted at the next v2.0 release, which will be published soon, because he is no longer a member of XP-JP Moderators nor of XP-JP Administration team. For the same reason, he will NOT provide any updates or fixes on the functions deleted at v2.0 release in the future however serious the found bugs are; XP-JP Administrations team or the lab will do. The function related to the radio system will be continued to be included.
+Now, MaySoMusician has published the first and final release including community moderation functions. Those function, such as `spam` commands or translating Xp-Bot error messages, are going to be deleted at the next v2.0 release, which will be published soon, because he is no longer a member of XP-JP Moderators nor of XP-JP Administration team. For the same reason, he will NOT provide any updates or fixes on the functions deleted at v2.0 release in the future however serious the found bugs are; XP-JP Administrations team or the lab will do. The function related to the radio system will be continued to be included.
 
 ## Installation
 
