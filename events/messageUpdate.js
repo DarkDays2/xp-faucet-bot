@@ -25,8 +25,11 @@ module.exports = (XPBot, oldMsg, newMsg) => {
 
         //console.log(userName);
         if(!userName) return;
+        
+        let v = XPBot.vpg.getValues(newMsg.guild.id);
+        if(!v) return;
 
-        if(!XPBot.config.allowedBalanceCnls.includes(newMsg.channel.name)){
+        if(v.allowedBalanceCnls && !v.allowedBalanceCnls.includes(newMsg.channel.name)){
           newMsg.delete()
             .then(msg => {
             console.log('[Deleted]', newMsg.channel.name);

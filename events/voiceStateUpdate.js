@@ -5,25 +5,31 @@ const lotSys = require('../modules/lotterySystem.js');
 module.exports = (XPBot, oldMember, newMember) => {
   if(!XPBot.ready) return;
   //if(message.author.bot) return;
-  if(oldMember.id === XPBot.user.id) return;
+  if(oldMember.id === XPBot.user.id){
+    if(oldMember.voiceChannelID !== newMember.voiceChannelID){
+      if(!newMember.voiceChannelID){
+        if(oldMember.voiceChannel.guild.id !== '374188134013075467') return;
+        
+        XPBot.user.setPresence({game: null});
+      } else{
+        if(newMember.voiceChannel.guild.id !== '374188134013075467') return;
+        
+        let str = newMember.voiceChannel.name;
+        console.log(str);
+        XPBot.user.setActivity(str, {type: 'LISTENING'});
+      }
+    }
+    return;
+  }
 
   if(oldMember.bot){
   } else{
-    /*let oldC = oldMember.voiceChannel ? oldMember.voiceChannel.name : 'null';
-    let newC = newMember.voiceChannel ? newMember.voiceChannel.name : 'null';
-    console.log(newMember.displayName, oldC, newC);*/
-    /*var radioChatCnls = {
-      'XP_radio802': 'xp_radio802',
-      'freetalk': 'vc_freetalk',
-      'general2': 'general',
-      'developer_only': '',
-      'ofuton': ''
-    };*/
-
     let welcomeVC = m => {
       let radioCnl = m.voiceChannel;
-      let radioChatCnl = m.guild.channels.find('name', XPBot.config.radioChatCnls[radioCnl.name]);
+      let radioChatCnlName = XPBot.getRadioChatCnl(m.guild, radioCnl);
+      if(!radioChatCnlName) return;
 
+      let radioChatCnl = m.guild.channels.find('name', radioChatCnlName);
       if(!radioChatCnl) return;
 
       let numRadioMember = radioCnl.members.size;

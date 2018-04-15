@@ -31,7 +31,9 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
           '  akarui1   - ひとし氏制作BGM\r\n' + 
           '  akarui2   - ひとし氏制作BGM\r\n' + 
           '  wafu      - ひとし氏制作BGM\r\n' +
-          '  izakaya01 - 酒場風BGM\r\n\r\n' +
+          '  izakaya01 - 酒場風BGM\r\n' +
+          '  bstheme   - お大事ラジオテーマソング\r\n' +
+          '  tan3demo  - でこぽん8848制作BGM\r\n\r\n' +
           '== !!radiocmd bgm pause ==\r\n' +
           '現在流れているBGM・ジングルを一時停止させます\r\n\r\n' +
           '== !!radiocmd bgm resume ==\r\n' +
@@ -70,18 +72,15 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
   });
 
   if(!radioCnl){
-    radioCnl = message.member.voiceChannel;
+    if(message.member.voiceChannel) radioCnl = message.member.voiceChannel;
+    else return;
   }
-  //console.log(radioCnl);
-  /*var radioChatCnls = {
-    'XP_radio802': 'xp_radio802',
-    'freetalk': 'vc_freetalk',
-    'general2': 'general',
-    'developer_only': '',
-    'ofuton': ''
-  };*/
-
-  var radioChatCnl = guild.channels.find('name', XPBot.config.radioChatCnls[radioCnl.name]);
+  
+  let radioChatCnlName = XPBot.getRadioChatCnl(guild, radioCnl);
+  var radioChatCnl;
+  
+  if(radioChatCnlName) radioChatCnl = guild.channels.find('name', radioChatCnlName);
+  
 
   if(subCmdName == 'bgm'){
     let type = args.shift().toLowerCase();
@@ -96,9 +95,9 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         let fade = args.shift();
         if(fade == 'fade'){
           let fadeSpan = parseFloat(args.shift());
-          XPBot.radioCenter.ctrler.setVol(guild, newVol, true, fadeSpan);
+          XPBot.radioCenter.ctrler.fade(guild, newVol, fadeSpan);
         } else{
-          XPBot.radioCenter.ctrler.setVol(guild, newVol, false);
+          XPBot.radioCenter.ctrler.changeVol(guild, newVol, false);
         }
       }
     }
@@ -136,30 +135,20 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         opts: {vol: vol},
         funcStart: async () => {
           await XPBot.wait(1000);
-          radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
+          if(radioChatCnl) radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
         }
       });
-
-      /*radioCnl.join().then(async connection => {
-        var streamOptions = { seek: 0, volume: vol };
-        var stream = ytdl('https://www.youtube.com/watch?v=' + videoId, { filter : 'audioonly' });
-
-        await XPBot.wait(80);
-        var dispatcher = connection.playStream(stream, streamOptions);
-        dispatcher.on('start', async () => {
-          await XPBot.wait(1000);
-          radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
-        });
-      });*/
     } else{
       let vols = {
         'morning01': 0.3,
-        'techno01': 0.3,
+        'techno01': 0.45,
         'atale': 0.3,
         'akarui1': 0.04,
         'akarui2': 0.04,
         'wafu': 0.04,
-        'izakaya01': 0.12
+        'izakaya01': 0.07,
+        'bstheme': 0.2,
+        'tan3demo1': 0.08
       };
 
       var vol = vols[type];
@@ -180,12 +169,15 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
             'morning01': '',
             'techno01': '',
             'atale': '',
-            'akarui1': 'BGM提供: <@390069961340616704>さん',
-            'akarui2': 'BGM提供: <@390069961340616704>さん',
-            'wafu': 'BGM提供: <@390069961340616704>さん'
+            'akarui1': 'BGM提供: ひとしさん',
+            'akarui2': 'BGM提供: ひとしさん',
+            'wafu': 'BGM提供: ひとしさん',
+            'izakaya01': 'BGM: 「**居酒屋01**」 (<@353169534984912896>)\r\nYouTube: __*Uploading SOON!*__',
+            'bstheme': 'BGM: https://www.youtube.com/watch?v=8MtQWSqkwOU',
+            'tan3demo1': 'BGM提供: <@391189305604964353>さん'
           };
 
-          if(msgs[type]){
+          if(msgs[type] && radioChatCnl){
             radioChatCnl.send(msgs[type]);
           }
         }
@@ -194,14 +186,16 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
 
   } else if(subCmdName == 'jingle'){
     let num = ('00' + args.shift().toString()).slice(-2);
-
-    radioCnl.join().then(async connection => {
-      await XPBot.wait(100);
-      var dispatcher = connection.playFile("././assets/jingle" + num + ".mp3", { volume: 0.5 , passes: 3, bitrate: 'auto'});
-      /*dispatcher.on('start', async () => {
-        await XPBot.wait(1000);
-        radioChatCnl.send('BGM: https://www.youtube.com/watch?v=' + videoId);
-      });*/
+    
+    /*仮措置*/
+    var v = 0.3;
+    if(num === '05') v = 0.1;
+    
+    XPBot.radioCenter.ctrler.playFile({
+      guild: guild,
+      cnl: radioCnl,
+      fileName: 'Jingle-' + num + '.mp3',
+      opts: {vol: v}
     });
   }
 };

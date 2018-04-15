@@ -9,14 +9,9 @@ var _sendSpam = function(XPBot, guild, channels, message, sendOption, funcAfterE
 
   let everyoneRole = guild.roles.find('name', '@everyone');
 
-  let sendPermAfterSpam = typeof spamOption.permAfter !== "undefined" ? spamOption.permAfter : true;
-
-  let needPreMsg = spamOption.sendPreMsg;
-  let needUnlockMsg = spamOption.sendUnlockMsg;
-
-  if(typeof needPreMsg == 'undefined') needPreMsg = spamOption.waitBefore >= 1000;
-  if(typeof needUnlockMsg == 'undefined') needUnlockMsg = sendPermAfterSpam && spamOption.waitAfter >= 3000;
-
+  let sendPermAfterSpam = typeof spamOption.permAfter !== "undefined" ? spamOption.permAfter : true,
+      needPreMsg = typeof spamOption.sendPreMsg !== 'undefined' ? spamOption.sendPreMsg : spamOption.waitBefore >= 1000,
+      needUnlockMsg = typeof spamOption.sendUnlockMsg !== 'undefined' ? spamOption.sendUnlockMsg : sendPermAfterSpam && spamOption.waitAfter >= 3000;
 
   Promise.all(
     channelsToSpam.map(chnl => {
@@ -24,7 +19,6 @@ var _sendSpam = function(XPBot, guild, channels, message, sendOption, funcAfterE
         chnl.startTyping();
 
         let preMsg = null;
-
         if(needPreMsg){
           preMsg = await chnl.send(
             'しばらくお待ちください\r\n:satellite: XP水道局がメッセージを受信しました\r\n:incoming_envelope: 転送しています'
@@ -36,9 +30,9 @@ var _sendSpam = function(XPBot, guild, channels, message, sendOption, funcAfterE
             everyoneRole,
             {'SEND_MESSAGES': false}
           );
-
-          await XPBot.wait(spamOption.waitBefore || 0);
+          await XPBot.wait(spamOption.waitBefore);
         }
+        
         chnl.send(message, sendOption)
           .then(async mainMsg => {
           await XPBot.wait(spamOption.waitAfter || 0);
@@ -56,55 +50,14 @@ var _sendSpam = function(XPBot, guild, channels, message, sendOption, funcAfterE
             if(funcAfterEach) funcAfterEach(mainMsg);
           });
 
-
           chnl.stopTyping();//別スレッドでタイピング停止
         });
         if(needPreMsg) preMsg.delete(2000); //別スレッドで削除
       });      
-      /*return chnl.overwritePermissions(
-        everyoneRole,
-        {'SEND_MESSAGES': false}
-      ).then(async ()=>{
-        await XPBot.wait(spamOption.waitBefore || 0);
-        return chnl.send(message, sendOption);
-      }).then(async msg => {
-        await XPBot.wait(spamOption.waitAfter || 0);
-        return chnl.overwritePermissions(
-          everyoneRole,
-          {'SEND_MESSAGES': sendPermAfterSpam}
-        ).then(() => msg);
-      }).then(msg=>{
-        chnl.stopTyping();
-        if(funcAfterEach) funcAfterEach(msg);
-      })*/
     })
   ).then(()=>{
     if(funcAfterAll) funcAfterAll();
   });
-  //////////
-  /*Promise.all(
-    channelsToSpam.map((chnl) => {
-      chnl.startTyping();
-      return chnl.overwritePermissions(
-        everyoneRole,
-        {'SEND_MESSAGES': false}
-      ).then(async ()=>{
-        await XPBot.wait(spamOption.waitBefore || 0);
-        return chnl.send(message, sendOption);
-      }).then(async msg => {
-        await XPBot.wait(spamOption.waitAfter || 0);
-        return chnl.overwritePermissions(
-          everyoneRole,
-          {'SEND_MESSAGES': sendPermAfterSpam}
-        ).then(() => msg);
-      }).then(msg=>{
-        chnl.stopTyping();
-        if(funcAfterEach) funcAfterEach(msg);
-      })
-    })
-  ).then(()=>{
-    if(funcAfterAll) funcAfterAll();
-  });*/
 
   writeLog = (title, contents)=>{
     XPBot.log('SPAM', contents, title);

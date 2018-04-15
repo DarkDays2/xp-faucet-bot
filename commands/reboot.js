@@ -40,7 +40,7 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: "水道局幹部"
+  permLevel: "Bot管理者"
 };
 
 exports.help = {

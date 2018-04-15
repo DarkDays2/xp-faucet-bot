@@ -2,8 +2,6 @@
 // 注: Botは全てのイベントに関連付けられているため、関数実行時全てのイベントに
 // XPBot, other, args が渡されます。
 const moment = require("moment");
-require("moment-duration-format");
-
 module.exports = (XPBot, message) => {
   if(!XPBot.ready) return;
   //if(message.author.bot) return;
@@ -29,40 +27,20 @@ module.exports = (XPBot, message) => {
 
         let userName = userField.value;
 
-        //console.log(userName);
         if(!userName) return;
-
-        if(!XPBot.config.allowedBalanceCnls.includes(message.channel.name)){
+        
+        let v = XPBot.vpg.getValues(message.guild.id);
+        if(!v) return;
+        
+        if(v.allowedBalanceCnls && !v.allowedBalanceCnls.includes(message.channel.name)){
           message.delete()
             .then(msg => {
             console.log('[Deleted]', message.channel.name);
-            //message.channel.send('`,balance`コマンドは <#375532870376357889> チャンネルでお使いください');
           }).message(e=>{
             if(e.code === 10008) /*空文*/ ;
             else console.error(e);
           });
         }
-
-        (async () => {
-          let fetchedUsers = await message.guild.fetchMembers(userName, 10);
-
-          console.log('catched balance', userName);
-          console.log(fetchedUsers.members.size);
-        })();
-
-
-        //console.log(userF.value);
-
-
-        /*XPBot.db.walletDB.addAddress(userID, userAddress, 'Bot')
-          .then(()=>{
-          //message.channel.send('DBに登録しました');
-        })
-          .catch((ex)=>{
-          message.channel.send('DBに登録失敗');
-        });
-
-        XPBot.botWatcher['MainBot'].notifyResponse(message, userID, 'balance');*/
         return;
       }
 
@@ -106,6 +84,27 @@ module.exports = (XPBot, message) => {
       XPBot.log("log", `${XPBot.config.permLevels.find(l => l.level === level).name} の ${message.author.username}(${message.author.id}) がわよ！を実行しました`, "CMD");
       return;
     }*/
+    
+    if(message.channel.type == 'dm'){
+      let ls = XPBot.getLogServer();
+      if(ls){
+        let time = moment(message.createdAt).format('YYYY-MM-DD HH:mm:ss.SS');
+        let username = message.author.username + '#' + message.author.discriminator;
+        let userID = message.author.id;
+        ls.channels.find('name', 'dm').send(`\`================================\`
+\`\`\`At: ${time}
+By: ${username} (${userID})\`\`\`
+${message.content}
+
+\`================================\``
+        );
+      }
+    }
+    
+    const ainote = require('../modules/ainote.js');
+    if(message.channel.name){
+      ainote(XPBot, message);
+    }
 
     // PersistentCollectionからこのサーバー用の設定を取得
     // Guildが無い場合はデフォルト設定（DM用）
@@ -117,39 +116,12 @@ module.exports = (XPBot, message) => {
 
     // ユーザーもしくはメンバーの権限を取得
     const level = XPBot.permlevel(message);
+    const levelName = XPBot.config.permLevels.find(l => l.level === level).name;
     const MainBotPrefix = ',';
 
-    let refString = ['?ref=', '&ref=', '?start=', '?c='];
-    let isRef = false;
-    refString.map(s => {
-      if(message.content.includes(s)) isRef = true;
-    })
-
-    if(isRef){
-      (async () => {
-        let logc = XPBot.getFrontendLogChannel(message.guild);
-        let senderGM = await XPBot.safenUsername(XPBot, message.member.displayName);
-        let senderUser = message.author.username + '#' + message.author.discriminator;
-        let msgAbs = message.content.slice(0, 140);
-        let sendAt = new moment(message.createdTimestamp).format('MM[月]DD[日] HH[時]mm[分]ss[秒]');
-
-        const Discord = require("discord.js");
-
-        logc.send('アフィリンクかも？', 
-                  new Discord.RichEmbed()
-                  .setTitle('検知報告')
-                  .addField('ユーザー名(表示)', senderGM, true)
-                  .addField('ユーザー名(内部)', senderUser, true)
-                  .addField('ユーザーID', message.author.id, true)
-                  .addField('メッセージID', message.id, true)
-                  .addField('検知場所', message.channel.name, true)
-                  .addField('検知日時', sendAt, true)
-                  .addField('メッセージ抜粋', msgAbs, false)
-                  .setTimestamp()
-                  .setColor([255, 0, 0])
-                 );
-      })();
-    }
+    const snitcher = require('../modules/snitcher.js');
+    snitcher(XPBot, message);
+    
 
     if(message.content.indexOf(settings.prefix) === 0){ // XPFaucet-Botのコマンド
       // コマンド名と引数を分離
@@ -168,16 +140,17 @@ module.exports = (XPBot, message) => {
       if(cmd && !message.guild && cmd.conf.guildOnly)
         return message.channel.send("指定されたコマンドはDMでは使用できません。サーバー内でお試しください。");
 
+      
       if(level < XPBot.levelCache[cmd.conf.permLevel]) {
         if(settings.systemNotice === "true") {
           return message.channel.send(`:no_entry_sign: あなたは、指定されたコマンドを実行するのに必要な権限がありません。
-あなたの権限レベル: ${level} (${XPBot.config.permLevels.find(l => l.level === level).name})
+あなたの権限レベル: ${level} (${levelName})
 要求されている権限レベル: ${XPBot.levelCache[cmd.conf.permLevel]} (${cmd.conf.permLevel})`);
         } else {
           return;
         }
       }
-
+      
       // message引数の単純化のため、送信者の権限レベルをauthorオブジェクトに格納（メンバーではないのでDMでも使用可）
       // levelというコマンドモジュールの引数は将来的に非推奨になる可能性あり
       message.author.permLevel = level;
@@ -187,7 +160,7 @@ module.exports = (XPBot, message) => {
         message.flags.push(args.shift().slice(1));
       }
       // コマンドが存在し且つユーザーが権限を持っているとき、コマンドを実行
-      XPBot.log("log", `${XPBot.config.permLevels.find(l => l.level === level).name} の ${message.author.username}(${message.author.id}) が${cmd.help.name}コマンドを実行しました`, "CMD");
+      XPBot.log("log", `${levelName} の ${message.author.username}(${message.author.id}) が${cmd.help.name}コマンドを実行しました`, "CMD");
       cmd.run(XPBot, message, args, level);
     } else if(message.content.indexOf(MainBotPrefix) === 0){ //本家Botのコマンド
       const args = message.content.slice(MainBotPrefix.length).trim().split(/ +/g);
@@ -207,7 +180,10 @@ module.exports = (XPBot, message) => {
       }else{
 
         if(command == 'balance'){
-          if(!XPBot.config.allowedBalanceCnls.includes(message.channel.name)){
+          let v = XPBot.vpg.getValues(message.guild.id);
+          if(!v) return;
+
+          if(v.allowedBalanceCnls && !v.allowedBalanceCnls.includes(message.channel.name)){
             message.channel.send('<@' + message.author.id + '> `,balance`コマンドは <@352815000257167362> に直接DMしてお使いください');
           }
         }

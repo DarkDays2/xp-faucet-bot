@@ -17,6 +17,7 @@ XPBot.MainBotReady = null;
 
 // 設定ファイル読み込み
 XPBot.config = require("./config.js");
+XPBot.vpg = require("./valuePerGuild.js");
 
 // 内部処理用関数読み込み
 require("./modules/functions.js")(XPBot);
