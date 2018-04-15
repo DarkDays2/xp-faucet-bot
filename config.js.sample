@@ -10,10 +10,6 @@ const config = {
 
   // Botのトークン。 https://discordapp.com/developers/applications/me で調べる。
   "token": "<Your Bot's Token>",
-
-  // ユーザーのXPを操作するBotのユーザーID（型: string）。
-  "WWWalletBot": "1234567890",
-  "JPWalletBot": null,
   
   "logServer": '1234567890',
 

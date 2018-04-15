@@ -3,7 +3,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
 
   let subCmdName = args.shift();
 
-  if(subCmdName == 'lockcnl'){
+  /*if(subCmdName == 'lockcnl'){
     sendSpam(
       XPBot,
       message.guild,
@@ -69,7 +69,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         })
       );
     });
-  } else if(subCmdName == 'vcin'){
+  } else */if(subCmdName == 'vcin'){
     if (message.member.voiceChannel) {
       message.member.voiceChannel.join().catch(e => console.error(e));
     }
@@ -95,11 +95,6 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
     }
   } else if(subCmdName == 'help'){
     let output = 
-        'lockcnl   :: チャンネルの書込を制限します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' +
-        'unlockcnl :: チャンネルの書込制限を解除します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' + 
-        'stoptype  :: Botのチャンネルでのタイピングを終了します。(チャンネル名は先頭に「#」無し/空白でつなげる)\r\n' + 
-        'bal       :: ,balanceを送信します\r\n' + 
-        'del       :: メッセージを削除します。(メッセージIDを空白でつなげる)\r\n' + 
         'vcin      :: 自分が参加しているボイスチャットに参加します。\r\n' + 
         'vcout     :: 自分が参加しているボイスチャットから退出します。\r\n' + 
         'radio\_jg  :: ジングル・BGMを流します。\r\n' + 

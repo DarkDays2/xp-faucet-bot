@@ -13,14 +13,5 @@ module.exports = async XPBot => {
   // 起動完了
   XPBot.ready = true;
   
-  let xpjp = XPBot.guilds.find('name', 'XP 日本');
-  if(xpjp){
-    let wwbot = await xpjp.fetchMember(XPBot.config.WWWalletBot);
-    XPBot.MainBotReady = wwbot.presence.status !== 'offline';
-    XPBot.log('WWWB', 'WWWalletBot\'s ready is: ' + XPBot.MainBotReady, 'Log');
-  } else{
-    XPBot.log('WWWB', 'WWWalletBotの起動状況の確認に失敗 !wwwbコマンドで手動設定してください', 'ERR');
-  }
-  
   require('../modules/radioCenter.js')(XPBot);
 };
