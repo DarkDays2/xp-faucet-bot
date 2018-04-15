@@ -55,7 +55,6 @@ exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  //specificAllowed: ['水道局長', '水道局幹部', '水道局職員', 'サーバー所有者', '管理者', 'モデレーター', 'チャットルーム・マネージャー', 'サポートチーム',  'ラジオ放送者'],
   permLevel: "サポートチーム"
 };
 

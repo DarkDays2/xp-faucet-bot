@@ -140,30 +140,14 @@ ${message.content}
       if(cmd && !message.guild && cmd.conf.guildOnly)
         return message.channel.send("指定されたコマンドはDMでは使用できません。サーバー内でお試しください。");
 
-      if(cmd.conf.specificAllowed){
-        if(!cmd.conf.specificAllowed.includes(levelName)){
-          if(settings.systemNotice === "true"){
-            var req = '';
-            cmd.conf.specificAllowed.map(r => {
-              req += `/ ${r} (${XPBot.config.permLevels.find(l => l.name === r).level}) `
-            });
-            req = req.slice(2);
-            return message.channel.send(`:no_entry_sign: あなたは、指定されたコマンドを実行するのに必要な権限がありません。
-あなたの権限: ${levelName} (${level})
-許可されている権限: ${req}`);
-          } else{
-            return;
-          }
-        }
-      } else{
-        if(level < XPBot.levelCache[cmd.conf.permLevel]) {
-          if(settings.systemNotice === "true") {
-            return message.channel.send(`:no_entry_sign: あなたは、指定されたコマンドを実行するのに必要な権限がありません。
+      
+      if(level < XPBot.levelCache[cmd.conf.permLevel]) {
+        if(settings.systemNotice === "true") {
+          return message.channel.send(`:no_entry_sign: あなたは、指定されたコマンドを実行するのに必要な権限がありません。
 あなたの権限レベル: ${level} (${levelName})
 要求されている権限レベル: ${XPBot.levelCache[cmd.conf.permLevel]} (${cmd.conf.permLevel})`);
-          } else {
-            return;
-          }
+        } else {
+          return;
         }
       }
       
