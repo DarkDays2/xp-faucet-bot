@@ -1,11 +1,11 @@
 const config = {
-  // Bot所有者（水道局長）のユーザーID。既定で権限レベル10。Bot所有者以外のユーザーIDは絶対に指定しないこと。
+  // Bot所有者のユーザーID。既定で権限レベル10。Bot所有者以外のユーザーIDは絶対に指定しないこと。
   "ownerID": "1234567890",
 
-  // Bot管理者（水道局幹部）のユーザーID配列（型: string）。既定で権限レベル9。
+  // Bot管理者のユーザーID配列（型: string）。既定で権限レベル9。
   "admins": [],
 
-  // Botサポート（水道局職員）のユーザーID配列（型: string）。既定で権限レベル8。
+  // BotサポートのユーザーID配列（型: string）。既定で権限レベル8。
   "support": [],
 
   // Botのトークン。 https://discordapp.com/developers/applications/me で調べる。
@@ -14,14 +14,6 @@ const config = {
   // ユーザーのXPを操作するBotのユーザーID（型: string）。
   "WWWalletBot": "1234567890",
   "JPWalletBot": null,
-
-  "radioChatCnls": {
-    'VoiceChannelName': 'TextChannelName'
-  },
-  
-  "allowedBalanceCnls": [
-    'general'
-  ],
   
   "logServer": '1234567890',
 
@@ -37,7 +29,6 @@ const config = {
     "modRole": "モデレータ - Moderator",
     "adminRole": "日本語管理者 - Japanese Admin",
     "systemNotice": "true", // trueのとき、権限のないユーザーがコマンドを実行しようとしたときに、エラーメッセージをGuildに送る。
-    "mainBotDown": "false"
   },
 
   // 権限レベルの定義
@@ -86,24 +77,24 @@ const config = {
      check: (message) => message.channel.type === "text" ? (message.guild.owner.user.id === message.author.id ? true : false) : false
     },
 
-    // Botサポート（水道局職員）は、Bot所有者（水道局長）の代理としてトラブルシューティングを補助するために、
+    // Botサポートは、Bot所有者の代理としてトラブルシューティングを補助するために、
     // 参加しているサーバーにおいてサーバー所有者と同等のBot操作権限を与えられた、特別な中間レベル。
     { level: 97,
-     name: "水道局職員",
+     name: "Botサポート",
      // メッセージ送信者のIDが、この設定ファイルで指定した配列に含まれているかをチェックする。
-     // そのため、Botサポート（水道局職員）の追加時にはBotを再起動する必要がある。!
+     // そのため、Botサポートの追加時にはBotを再起動する必要がある。!
      check: (message) => config.support.includes(message.author.id)
     },
 
-    // Bot管理者（水道局幹部）は、Botの再起動やコマンドの再読込などの特別なコマンドを実行できる。
+    // Bot管理者は、Botの再起動やコマンドの再読込などの特別なコマンドを実行できる。
     { level: 98,
-     name: "水道局幹部",
+     name: "Bot管理者",
      check: (message) => config.admins.includes(message.author.id)
     },
 
     // Botの所有者。evalやexecなどの危険なコマンドが実行できるため、最高の権限レベルを与えるべき。
     { level: 99,
-     name: "水道局長", 
+     name: "Bot所有者", 
      // 単純に、メッセージ送信者のユーザーIDがこの設定ファイルで指定されたIDに一致するかどうかを調べる。
      check: (message) => message.client.config.ownerID === message.author.id
     }
