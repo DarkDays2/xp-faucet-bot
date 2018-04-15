@@ -14,14 +14,6 @@ const config = {
   // ユーザーのXPを操作するBotのユーザーID（型: string）。
   "WWWalletBot": "1234567890",
   "JPWalletBot": null,
-
-  "radioChatCnls": {
-    'VoiceChannelName': 'TextChannelName'
-  },
-  
-  "allowedBalanceCnls": [
-    'general'
-  ],
   
   "logServer": '1234567890',
 
