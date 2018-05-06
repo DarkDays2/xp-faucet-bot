@@ -70,7 +70,8 @@ module.exports = function(XPBot) {
       'wafu': 'xp_wafu_halfhourly_loop.mp3',
       'izakaya01': 'BGM-Izakaya01.mp3',
       'bstheme': 'BGM-BSTheme.mp3',
-      'tan3demo1': 'BGM-Tan3demo1.mp3'
+      'tan3demo1': 'BGM-Tan3demo1.mp3',
+      'amemoyou': 'BGM-Amemoyou.mp3'
     };
     
     let filename = pairs[alias];

@@ -143,12 +143,13 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
         'morning01': 0.3,
         'techno01': 0.45,
         'atale': 0.3,
-        'akarui1': 0.04,
-        'akarui2': 0.04,
+        'akarui1': 0.03,
+        'akarui2': 0.03,
         'wafu': 0.04,
         'izakaya01': 0.07,
         'bstheme': 0.2,
-        'tan3demo1': 0.08
+        'tan3demo1': 0.08,
+        'amemoyou': 0.12
       };
 
       var vol = vols[type];
@@ -174,7 +175,20 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
             'wafu': 'BGM提供: ひとしさん',
             'izakaya01': 'BGM: 「**居酒屋01**」 (<@353169534984912896>)\r\nYouTube: __*Uploading SOON!*__',
             'bstheme': 'BGM: https://www.youtube.com/watch?v=8MtQWSqkwOU',
-            'tan3demo1': 'BGM提供: <@391189305604964353>さん'
+            'tan3demo1': 'BGM提供: <@391189305604964353>さん',
+            'amemoyou': `BGM: 「**雨模様の居酒屋**」
+雨が降っていたって
+前を向いて歩こう
+また会える日を信じて
+----------------
+1. XPちゃんによるXP応援ソング - by Yota Arai (<https://youtu.be/KwPLn70X4NI>)
+2. XPのうた - by hitoshi(Senses Circuit) (<https://youtu.be/0QW8sgXzy9A>)
+3. お大事ラジオテーマソング - by ベアちゃんスーさん (<https://youtu.be/8MtQWSqkwOU>)
+4. in the Rain - by おぐまばく (<https://youtu.be/TyCRMPjibW0>)
+5. 宴 - by おぐまばく (<https://soundcloud.com/ax8gjruommva/quwopayi21if/s-oZLPz>)
+----------------
+Recomposed by <@353169534984912896>
+`
           };
 
           if(msgs[type] && radioChatCnl){

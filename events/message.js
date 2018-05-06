@@ -51,10 +51,6 @@ ${message.content}
     const levelName = XPBot.config.permLevels.find(l => l.level === level).name;
     const MainBotPrefix = ',';
 
-    const snitcher = require('../modules/snitcher.js');
-    snitcher(XPBot, message);
-    
-
     if(message.content.indexOf(settings.prefix) === 0){ // XPFaucet-Botのコマンド
       // コマンド名と引数を分離
       // 例: 「+say Is this the real life?」
