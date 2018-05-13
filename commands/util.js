@@ -1,4 +1,4 @@
-const sendSpam = require('../modules/sendSpam.js');
+//const sendSpam = require('../modules/sendSpam.js');
 exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-unused-vars
 
   let subCmdName = args.shift();

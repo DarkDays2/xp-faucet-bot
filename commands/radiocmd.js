@@ -1,5 +1,5 @@
 const ytdl = require('ytdl-core');
-const sendSpam = require('../modules/sendSpam.js');
+//const sendSpam = require('../modules/sendSpam.js');
 
 exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-unused-vars
 
@@ -33,7 +33,7 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
           '  wafu      - ひとし氏制作BGM\r\n' +
           '  izakaya01 - 酒場風BGM\r\n' +
           '  bstheme   - お大事ラジオテーマソング\r\n' +
-          '  tan3demo  - でこぽん8848制作BGM\r\n\r\n' +
+          '  tan3demo1 - でこぽん8848制作BGM\r\n\r\n' +
           '== !!radiocmd bgm pause ==\r\n' +
           '現在流れているBGM・ジングルを一時停止させます\r\n\r\n' +
           '== !!radiocmd bgm resume ==\r\n' +
@@ -140,8 +140,8 @@ exports.run = async (XPBot, message, args, level) => {// eslint-disable-line no-
       });
     } else{
       let vols = {
-        'morning01': 0.3,
-        'techno01': 0.45,
+        'morning01': 0.1,
+        'techno01': 0.2,
         'atale': 0.3,
         'akarui1': 0.03,
         'akarui2': 0.03,

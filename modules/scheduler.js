@@ -1,7 +1,7 @@
 //var sqlite3 = require('sqlite3');
 var scd = require('node-schedule');
 const moment = require("moment");
-const sendSpam = require('../modules/sendSpam.js');
+//const sendSpam = require('../modules/sendSpam.js');
 require("moment-duration-format");
 
 module.exports = function(XPBot) {
@@ -77,7 +77,7 @@ module.exports = function(XPBot) {
           });
         }).catch(console.log);
       }
-    } else if(origFuncInfo.cmdName == 'send_spam'){
+    } /*else if(origFuncInfo.cmdName == 'send_spam'){
       // guild: guildID
       // channels: channels
       // msg: message
@@ -115,7 +115,7 @@ module.exports = function(XPBot) {
         },
         {waitBefore: wBefore, waitAfter: wAfter}
       );
-    }
+    }*/
     writeLog('Log', 'タスク(' + origFuncInfo.taskId + ')の実行を終了しました');
     //console.log(origFuncInfo.afterStat);
     XPBot.db.taskScdDB.setStatusById(origFuncInfo.taskId, origFuncInfo.afterStat, 'all');
