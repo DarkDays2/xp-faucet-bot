@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const ytdl = require('ytdl-core');
 //var sqlite3 = require('sqlite3');
+const soundData = require('../assets/soundData.js');
 var writeLog;
 
 module.exports = function(XPBot) {
@@ -61,28 +62,16 @@ module.exports = function(XPBot) {
   };
   
   let playFileAlias = ({guild: guild, cnl: cnl, alias: alias, opts: {seek: seek = 0, vol: vol = 0.01}, funcStart: funcStart}) => {
-    let pairs = {
-      'morning01': 'BGM-Morning01.mp3',
-      'techno01': 'BGM-Techno01.mp3',
-      'atale': 'A Tale-001b.mp3',
-      'akarui1': 'xp_akarui_hourly_loop.mp3',
-      'akarui2': 'xp_akarui_2_halfhourly_loop.mp3',
-      'wafu': 'xp_wafu_halfhourly_loop.mp3',
-      'izakaya01': 'BGM-Izakaya01.mp3',
-      'bstheme': 'BGM-BSTheme.mp3',
-      'tan3demo1': 'BGM-Tan3demo1.mp3',
-      'amemoyou': 'BGM-Amemoyou.mp3'
-    };
-    
-    let filename = pairs[alias];
-    if(alias) XPBot.radioCenter.ctrler.playFile({
-      guild: guild,
-      cnl: cnl,
-      fileName: filename,
-      opts: {seek: seek, vol: vol},
-      funcStart: funcStart
-    });
-    else throw new TypeError('無効な alias です');
+    if(alias in soundData){
+      PBot.radioCenter.ctrler.playFile({
+        guild: guild,
+        cnl: cnl,
+        fileName: soundData[alias].fileName,
+        opts: {seek: seek, vol: vol},
+        funcStart: funcStart
+      });
+    } else
+      throw new TypeError('無効な alias です');
   };
   
   let enqueue = (type, args) => {
