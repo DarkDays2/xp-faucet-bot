@@ -1,9 +1,9 @@
 exports.run = async (XPBot, message, args, level) => { // eslint-disable-line no-unused-vars
-  message.reply('XPJPWalletのコマンドは `!xp` です。よく確認してもう一度お試しください。')
+  /*message.reply('XPJPWalletのコマンドは `!xp` です。よく確認してもう一度お試しください。')
   .then(async msg => {
     await XPBot.wait(20000);
     msg.delete();
-  });
+  });*/
 };
 
 exports.conf = {
