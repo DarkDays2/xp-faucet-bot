@@ -63,7 +63,7 @@ module.exports = function(XPBot) {
   
   let playFileAlias = ({guild: guild, cnl: cnl, alias: alias, opts: {seek: seek = 0, vol: vol = 0.01}, funcStart: funcStart}) => {
     if(alias in soundData){
-      PBot.radioCenter.ctrler.playFile({
+      XPBot.radioCenter.ctrler.playFile({
         guild: guild,
         cnl: cnl,
         fileName: soundData[alias].fileName,
